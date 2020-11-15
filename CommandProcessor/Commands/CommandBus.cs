@@ -1,3 +1,4 @@
+using System;
 using CommandProcessor.Commands.Commands;
 using CommandProcessor.Commands.Handlers;
 
@@ -14,7 +15,21 @@ namespace CommandProcessor.Commands
 
         public void Handle(ICommand command)
         {
-            createGreetingHandler.Handle((CreateGreetingCommand)command);
+            if (command is CreateGreetingCommand)
+            {
+                createGreetingHandler.Handle((CreateGreetingCommand)command);
+            }
+            else
+            {
+                throw new UnknownCommandException("Unknown Command");
+            }
+        }
+    }
+
+    public class UnknownCommandException : Exception
+    {
+        public UnknownCommandException(string message): base(message)
+        {
         }
     }
 }

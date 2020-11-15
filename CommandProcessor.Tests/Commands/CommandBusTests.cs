@@ -4,6 +4,8 @@ using CommandProcessor.Commands.Handlers;
 using CommandProcessor.Commands.Commands;
 using CommandProcessor.Commands.Entities;
 using CommandProcessor.Commands;
+using System;
+using FluentAssertions;
 
 namespace CommandProcessor.Tests.Commands.Handlers
 {
@@ -21,12 +23,28 @@ namespace CommandProcessor.Tests.Commands.Handlers
                     Message = "Hello. This is a message"
                 }
             };
-            
+
             var commandBus = new CommandBus(mockCreateGreetingHandler.Object);
 
             commandBus.Handle(command);
 
             mockCreateGreetingHandler.Verify(mock => mock.Handle(command));
+        }
+
+        [Fact]
+        public void ShouldRaiseError_WhenAnUnknownCommandIsPassed()
+        {
+            var mockCreateGreetingHandler = new Mock<ICreateGreetingHandler>();
+            var commandBus = new CommandBus(mockCreateGreetingHandler.Object);
+
+            var command = new UnknownCommand();
+
+            commandBus.Invoking(bus => bus.Handle(command))
+                .Should().Throw<UnknownCommandException>();
+        }
+
+        class UnknownCommand : ICommand
+        {
         }
     }
 }
