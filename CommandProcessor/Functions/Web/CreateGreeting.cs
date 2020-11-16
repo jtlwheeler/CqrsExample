@@ -6,13 +6,19 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using CommandProcessor.Commands;
+using CommandProcessor.Commands.Commands;
+using CommandProcessor.Commands.Entities;
 
 namespace CommandProcessor.Functions.Web
 {
     public class CreateGreeting
     {
-        public CreateGreeting()
+        private readonly ICommandBus commandBus;
+
+        public CreateGreeting(ICommandBus commandBus)
         {
+            this.commandBus = commandBus;
         }
 
         [FunctionName("CreateGreeting")]
@@ -20,10 +26,20 @@ namespace CommandProcessor.Functions.Web
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
             ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            log.LogInformation("Create greeting");
 
             var content = await new StreamReader(req.Body).ReadToEndAsync();
             var greeting = JsonConvert.DeserializeObject<GreetingRequest>(content);
+
+            var command = new CreateGreetingCommand
+            {
+                Greeting = new Greeting
+                {
+                    Message = greeting.Message
+                }
+            };
+
+            commandBus.Handle(command);
 
             return new OkResult();
         }
