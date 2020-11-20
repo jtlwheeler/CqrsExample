@@ -1,5 +1,6 @@
 using CommandProcessor.Commands;
 using CommandProcessor.Commands.Handlers;
+using CommandProcessor.Events;
 using CommandProcessor.Persistence;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +14,11 @@ namespace CommandProcessor
         {
             builder.Services.AddSingleton<ICommandBus>((s) =>
             {
-                return new CommandBus(new CreateGreetingHandler(new InMemoryGreetingRepository()));
+                var eventBus = new EventBusConsoleLogger();
+                var greetingRepository = new InMemoryGreetingRepository(eventBus);
+                var createGreetingHandler = new CreateGreetingHandler(greetingRepository);
+
+                return new CommandBus(createGreetingHandler);
             });
         }
     }

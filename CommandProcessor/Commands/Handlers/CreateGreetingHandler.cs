@@ -17,5 +17,4 @@ namespace CommandProcessor.Commands.Handlers
             greetingRepository.Save(command.Greeting);
         }
     }
-
 }
