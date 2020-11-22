@@ -1,0 +1,28 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Deploy Infrastructure
+
+# Controls when the action will run.
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [main]
+    paths:
+      - "infrastructure"
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Deploy Azure Resource Manager (ARM) Template
+        env:
+          RESOURCE_GROUP: "cqrs"
+        uses: Azure/arm-deploy@v1.0.1
+        with:
+          scope: "resourcegroup"
+          resourceGroupName: $RESOURCE_GROUP
+          template: "infrastructure/azuredeploy.yml"
