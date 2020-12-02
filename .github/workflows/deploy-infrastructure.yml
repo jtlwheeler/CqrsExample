@@ -34,4 +34,4 @@ jobs:
         with:
           subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
           resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
-          template: '$GITHUB_WORKSPACE/infrastructure/azuredeploy.json'
+          template: './infrastructure/azuredeploy.json'
