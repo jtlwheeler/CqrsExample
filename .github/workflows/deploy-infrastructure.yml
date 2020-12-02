@@ -19,7 +19,7 @@ jobs:
   deploy-infrastructure-template:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v2
 
       - name: Hello world
         run: ls $GITHUB_WORKSPACE/infrastructure
@@ -34,4 +34,4 @@ jobs:
         with:
           subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
           resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
-          template: $GITHUB_WORKSPACE/infrastructure/azuredeploy.json
+          template: '$GITHUB_WORKSPACE/infrastructure/azuredeploy.json'
