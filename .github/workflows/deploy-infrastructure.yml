@@ -19,13 +19,10 @@ jobs:
   deploy-infrastructure-template:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@master
 
       - name: Hello world
         run: ls $GITHUB_WORKSPACE/infrastructure
-
-      - name: Temp
-        run: $GITHUB_WORKSPACE/infrastructure/azuredeploy.json
 
       - name: Login to Azure
         uses: azure/login@v1
