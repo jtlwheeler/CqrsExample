@@ -21,6 +21,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Hello world
+        run: ls $GITHUB_WORKSPACE
+
       - name: Login to Azure
         uses: azure/login@v1
         with:
