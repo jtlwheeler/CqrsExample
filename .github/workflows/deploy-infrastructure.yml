@@ -22,7 +22,10 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Hello world
-        run: ls $GITHUB_WORKSPACE
+        run: ls $GITHUB_WORKSPACE/infrastructure
+
+      - name: Temp
+        run: $GITHUB_WORKSPACE/infrastructure/azuredeploy.json
 
       - name: Login to Azure
         uses: azure/login@v1
