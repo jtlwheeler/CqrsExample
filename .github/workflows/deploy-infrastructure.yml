@@ -16,9 +16,8 @@ env:
   AZURE_RESOURCE_GROUP: cqrs
 
 jobs:
-  build:
+  deploy-infrastructure-template:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
 
@@ -32,4 +31,4 @@ jobs:
         with:
           subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
           resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
-          template: "infrastructure/azuredeploy.yml"
+          template: "$GITHUB_WORKSPACE/infrastructure/azuredeploy.yml"
