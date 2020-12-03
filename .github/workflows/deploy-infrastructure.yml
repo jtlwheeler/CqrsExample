@@ -35,4 +35,4 @@ jobs:
           subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
           resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
           template: './infrastructure/azuredeploy.json'
-          deploymentName: azuredeploy-$GITHUB_RUN_ID
+          deploymentName: azuredeploy-a
