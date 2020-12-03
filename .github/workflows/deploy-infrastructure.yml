@@ -21,6 +21,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Hello
+        run: echo 'azuredeploy-$GITHUB_RUN_ID-$GITHUB_SHA'
+
       - name: Login to Azure
         uses: azure/login@v1
         with:
@@ -32,4 +35,4 @@ jobs:
           subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
           resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
           template: './infrastructure/azuredeploy.json'
-          deploymentName: 'deploy-infrastructure-$GITHUB_RUN_ID-$GITHUB_SHA'
+          deploymentName: 'azuredeploy-$GITHUB_RUN_ID-$GITHUB_SHA'
