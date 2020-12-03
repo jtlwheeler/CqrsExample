@@ -32,4 +32,3 @@ jobs:
           subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
           resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
           template: './infrastructure/azuredeploy.json'
-          deploymentName: 'deploy-infrastructure-$GITHUB_RUN_ID-$GITHUB_SHA'
