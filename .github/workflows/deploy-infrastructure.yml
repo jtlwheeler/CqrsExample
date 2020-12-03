@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Hello
-        run: echo azuredeploy-${{ env.GITHUB_RUN_ID }}
+        run: echo azuredeploy-${{ GITHUB_RUN_ID }}
 
       - name: Login to Azure
         uses: azure/login@v1
