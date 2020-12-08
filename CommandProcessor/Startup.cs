@@ -12,14 +12,10 @@ namespace CommandProcessor
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            builder.Services.AddSingleton<ICommandBus>((s) =>
-            {
-                var eventBus = new EventBusConsoleLogger();
-                var greetingRepository = new InMemoryGreetingRepository(eventBus);
-                var createGreetingHandler = new CreateGreetingHandler(greetingRepository);
-
-                return new CommandBus(createGreetingHandler);
-            });
+            builder.Services.AddSingleton<IEventBus, EventBusConsoleLogger>();
+            builder.Services.AddSingleton<IGreetingRepository, InMemoryGreetingRepository>();
+            builder.Services.AddSingleton<ICreateGreetingHandler, CreateGreetingHandler>();
+            builder.Services.AddSingleton<ICommandBus, CommandBus>();
         }
     }
 }
