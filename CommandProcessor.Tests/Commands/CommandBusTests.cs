@@ -2,9 +2,7 @@ using Xunit;
 using Moq;
 using CommandProcessor.Commands.Handlers;
 using CommandProcessor.Commands.Commands;
-using CommandProcessor.Commands.Entities;
 using CommandProcessor.Commands;
-using System;
 using FluentAssertions;
 
 namespace CommandProcessor.Tests.Commands.Handlers
@@ -12,30 +10,27 @@ namespace CommandProcessor.Tests.Commands.Handlers
     public class CommandBusTests
     {
         [Fact]
-        public void WhenACreateGreetingCommandIsPassed_thenTheCorrectHandlerShouldBeCalled()
+        public void WhenAOpenAccountCommandIsSentOnTheCommandBus_ThenTheCorrectHandlerShouldBeCalled()
         {
-            var mockCreateGreetingHandler = new Mock<ICreateGreetingHandler>();
+            var mockOpenBankAccountHandler = new Mock<IOpenBankAccountHandler>();
 
-            var command = new CreateGreetingCommand
+            var command = new OpenBankAccountCommand
             {
-                Greeting = new Greeting
-                {
-                    Message = "Hello. This is a message"
-                }
+                Name = "Jane Doe"
             };
 
-            var commandBus = new CommandBus(mockCreateGreetingHandler.Object);
+            var commandBus = new CommandBus(mockOpenBankAccountHandler.Object);
 
             commandBus.Handle(command);
 
-            mockCreateGreetingHandler.Verify(mock => mock.Handle(command));
+            mockOpenBankAccountHandler.Verify(mock => mock.Handle(command));
         }
 
         [Fact]
         public void ShouldRaiseError_WhenAnUnknownCommandIsPassed()
         {
-            var mockCreateGreetingHandler = new Mock<ICreateGreetingHandler>();
-            var commandBus = new CommandBus(mockCreateGreetingHandler.Object);
+            var mockOpenBankAccountHandler = new Mock<IOpenBankAccountHandler>();
+            var commandBus = new CommandBus(mockOpenBankAccountHandler.Object);
 
             var command = new UnknownCommand();
 

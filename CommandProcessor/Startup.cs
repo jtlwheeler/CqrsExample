@@ -1,7 +1,6 @@
 using CommandProcessor.Commands;
 using CommandProcessor.Commands.Handlers;
 using CommandProcessor.Events;
-using CommandProcessor.Persistence;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,8 +12,7 @@ namespace CommandProcessor
         public override void Configure(IFunctionsHostBuilder builder)
         {
             builder.Services.AddSingleton<IEventBus, EventBusConsoleLogger>();
-            builder.Services.AddSingleton<IGreetingRepository, InMemoryGreetingRepository>();
-            builder.Services.AddSingleton<ICreateGreetingHandler, CreateGreetingHandler>();
+            builder.Services.AddSingleton<IOpenBankAccountHandler, OpenBankAccountHandler>();
             builder.Services.AddSingleton<ICommandBus, CommandBus>();
         }
     }

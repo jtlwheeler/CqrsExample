@@ -6,21 +6,23 @@ namespace CommandProcessor.Commands
 {
     public class CommandBus : ICommandBus
     {
-        private ICreateGreetingHandler createGreetingHandler;
+        private IOpenBankAccountHandler openBankAccountHandler;
 
-        public CommandBus(ICreateGreetingHandler createGreetingHandler)
+        public CommandBus(IOpenBankAccountHandler openBankAccountHandler)
         {
-            this.createGreetingHandler = createGreetingHandler;
+            this.openBankAccountHandler = openBankAccountHandler;
         }
 
         public void Handle(ICommand command)
         {
-            if (command is CreateGreetingCommand)
+
+            if (command is OpenBankAccountCommand)
             {
-                createGreetingHandler.Handle((CreateGreetingCommand)command);
+                openBankAccountHandler.Handle((OpenBankAccountCommand)command);
             }
             else
             {
+
                 throw new UnknownCommandException("Unknown Command");
             }
         }
@@ -28,7 +30,7 @@ namespace CommandProcessor.Commands
 
     public class UnknownCommandException : Exception
     {
-        public UnknownCommandException(string message): base(message)
+        public UnknownCommandException(string message) : base(message)
         {
         }
     }
