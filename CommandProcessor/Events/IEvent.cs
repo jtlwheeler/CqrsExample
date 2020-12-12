@@ -8,5 +8,6 @@ namespace CommandProcessor.Events
         Guid EntityId { get; }
         DateTime Timestamp { get; }
         string Type { get; }
+        int Version { get; }
     }
 }

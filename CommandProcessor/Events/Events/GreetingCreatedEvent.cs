@@ -10,7 +10,7 @@ namespace CommandProcessor.Events.Events
         public DateTime Timestamp { get; private set; }
 
         public string Type { get; private set; }
-
+        public int Version { get; private set; }
         public string Message { get; private set; }
 
         public GreetingCreatedEvent(string message)

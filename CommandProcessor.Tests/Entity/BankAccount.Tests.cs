@@ -35,5 +35,16 @@ namespace CommandProcessor.Tests.Entity
             accountOpenedEvent.Type.Should().Be("BankAccountCreatedEvent");
             accountOpenedEvent.Name.Should().Be("John Doe");
         }
+
+        [Fact]
+        public void WhenABankAccountIsOpened_ThenAnEventIsCreated_AndTheVersionIsSet()
+        {
+            var account = new BankAccount();
+
+            account.Open("John Doe");
+
+            var accountOpenedEvent = (BankAccountCreatedEvent)account.Changes[0];
+            accountOpenedEvent.Version.Should().Be(1);
+        }
     }
 }

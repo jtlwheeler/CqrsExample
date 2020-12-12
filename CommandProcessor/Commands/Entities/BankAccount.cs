@@ -8,13 +8,12 @@ namespace CommandProcessor.Commands.Entities
     public class BankAccount: Entity
     {
         public Guid Id { get; private set; }
-        public Guid EntityId { get; private set; }
         public string Name { get; private set; }
 
         public void Open(string name)
         {
             var newAccountId = Guid.NewGuid();
-            var @event = new BankAccountCreatedEvent(name, newAccountId);
+            var @event = new BankAccountCreatedEvent(name, newAccountId, 1);
             Apply(@event);
         }
 

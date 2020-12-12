@@ -9,14 +9,16 @@ namespace CommandProcessor.Events.Events
         public DateTime Timestamp { get; private set; }
         public string Type { get; private set; }
         public string Name { get; private set; }
+        public int Version { get; private set; }
 
-        public BankAccountCreatedEvent(string name, Guid accountId)
+        public BankAccountCreatedEvent(string name, Guid accountId, int version)
         {
             Id = Guid.NewGuid();
             EntityId = accountId;
             Timestamp = DateTime.UtcNow;
             Type = "BankAccountCreatedEvent";
             Name = name;
+            Version = version;
         }
     }
 }
