@@ -24,7 +24,7 @@ namespace CommandProcessor.Commands.Entities
             {
                 case BankAccountCreatedEvent accountCreatedEvent:
                     Name = accountCreatedEvent.Name;
-                    Id = Guid.NewGuid();
+                    Id = accountCreatedEvent.EntityId;
                     break;
             }
         }

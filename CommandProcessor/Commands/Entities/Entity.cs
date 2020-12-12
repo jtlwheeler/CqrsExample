@@ -5,17 +5,17 @@ namespace CommandProcessor.Entities
 {
     public abstract class Entity
     {
-        List<IEvent> changes;
+        public List<IEvent> Changes { get; private set; }
 
         protected Entity()
         {
-            changes = new List<IEvent>();
+            Changes = new List<IEvent>();
         }
 
         public void Apply(IEvent @event)
         {
             When(@event);
-            changes.Add(@event);
+            Changes.Add(@event);
         }
 
         protected abstract void When(IEvent @event);
