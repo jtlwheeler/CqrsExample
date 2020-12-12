@@ -5,7 +5,8 @@ namespace CommandProcessor.Events
     public interface IEvent
     {
         Guid Id { get; }
+        Guid EntityId { get; }
         DateTime Timestamp { get; }
-        string Name { get; }
+        string Type { get; }
     }
 }
