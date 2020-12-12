@@ -4,7 +4,7 @@ using FluentAssertions;
 using System;
 using CommandProcessor.Events.Events;
 
-namespace CommandProcessor.Tests.Entity
+namespace CommandProcessor.Tests.Entities
 {
     public class BankAccountTests
     {
