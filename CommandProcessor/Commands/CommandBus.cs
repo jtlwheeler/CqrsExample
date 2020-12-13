@@ -1,6 +1,7 @@
 using System;
 using CommandProcessor.Commands.Commands;
 using CommandProcessor.Commands.Handlers;
+using CommandProcessor.Result;
 
 namespace CommandProcessor.Commands
 {
@@ -13,16 +14,15 @@ namespace CommandProcessor.Commands
             this.openBankAccountHandler = openBankAccountHandler;
         }
 
-        public void Handle(ICommand command)
+        public Result<Guid> Handle(ICommand command)
         {
 
             if (command is OpenBankAccountCommand)
             {
-                openBankAccountHandler.Handle((OpenBankAccountCommand)command);
+                return openBankAccountHandler.Handle((OpenBankAccountCommand)command);
             }
             else
             {
-
                 throw new UnknownCommandException("Unknown Command");
             }
         }

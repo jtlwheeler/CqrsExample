@@ -1,7 +1,9 @@
+using System;
+using CommandProcessor.Result;
 namespace CommandProcessor.Commands
 {
     public interface ICommandBus
     {
-        public void Handle(ICommand command);
+        public Result<Guid> Handle(ICommand command);
     }
 }

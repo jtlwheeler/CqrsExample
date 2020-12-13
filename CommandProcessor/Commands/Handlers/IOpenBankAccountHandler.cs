@@ -1,9 +1,11 @@
+using System;
 using CommandProcessor.Commands.Commands;
+using CommandProcessor.Result;
 
 namespace CommandProcessor.Commands.Handlers
 {
     public interface IOpenBankAccountHandler
     {
-        public void Handle(OpenBankAccountCommand command);
+        public Result<Guid> Handle(OpenBankAccountCommand command);
     }
 }

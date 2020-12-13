@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using CommandProcessor.Commands;
 using CommandProcessor.Commands.Commands;
-using CommandProcessor.Commands.Entities;
+using System;
 
 namespace CommandProcessor.Functions.Web
 {
@@ -36,14 +36,24 @@ namespace CommandProcessor.Functions.Web
                 Name = createAccountRequest.Name
             };
 
-            commandBus.Handle(command);
+            var result = commandBus.Handle(command);
 
-            return new OkResult();
+            return new OkObjectResult(new CreateAccountResponse(result.Value));
         }
     }
 
     public class CreateAccountRequest
     {
         public string Name { get; set; }
+    }
+
+    public class CreateAccountResponse
+    {
+        public Guid AccountId { get; private set; }
+
+        public CreateAccountResponse(Guid accountId)
+        {
+            AccountId = accountId;
+        }
     }
 }

@@ -1,5 +1,7 @@
+using System;
 using CommandProcessor.Commands.Commands;
 using CommandProcessor.Commands.Entities;
+using CommandProcessor.Result;
 
 namespace CommandProcessor.Commands.Handlers
 {
@@ -12,12 +14,14 @@ namespace CommandProcessor.Commands.Handlers
             this.entityStore = entityStore;
         }
 
-        public void Handle(OpenBankAccountCommand command)
+        public Result<Guid> Handle(OpenBankAccountCommand command)
         {
             var newBankAccount = new BankAccount();
             newBankAccount.Open(command.Name);
 
             entityStore.Save(newBankAccount);
+
+            return Result<Guid>.Ok(newBankAccount.Id);
         }
     }
 }
