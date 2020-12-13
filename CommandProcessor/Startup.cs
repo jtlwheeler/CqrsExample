@@ -1,6 +1,7 @@
 using CommandProcessor.Commands;
+using CommandProcessor.Commands.Entities;
 using CommandProcessor.Commands.Handlers;
-using CommandProcessor.Events;
+using CommandProcessor.Events.Persistence;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,7 +12,8 @@ namespace CommandProcessor
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            builder.Services.AddSingleton<IEventBus, EventBusConsoleLogger>();
+            builder.Services.AddSingleton<IEventStore, InMemoryEventStore>();
+            builder.Services.AddSingleton<IEntityStore, EntityStore>();
             builder.Services.AddSingleton<IOpenBankAccountHandler, OpenBankAccountHandler>();
             builder.Services.AddSingleton<ICommandBus, CommandBus>();
         }
