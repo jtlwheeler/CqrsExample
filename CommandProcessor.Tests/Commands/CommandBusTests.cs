@@ -10,7 +10,7 @@ namespace CommandProcessor.Tests.Commands.Handlers
     public class CommandBusTests
     {
         [Fact]
-        public void WhenAOpenAccountCommandIsSentOnTheCommandBus_ThenTheCorrectHandlerShouldBeCalled()
+        public async void WhenAOpenAccountCommandIsSentOnTheCommandBus_ThenTheCorrectHandlerShouldBeCalled()
         {
             var mockOpenBankAccountHandler = new Mock<IOpenBankAccountHandler>();
 
@@ -21,7 +21,7 @@ namespace CommandProcessor.Tests.Commands.Handlers
 
             var commandBus = new CommandBus(mockOpenBankAccountHandler.Object);
 
-            commandBus.Handle(command);
+            await commandBus.Handle(command);
 
             mockOpenBankAccountHandler.Verify(mock => mock.Handle(command));
         }

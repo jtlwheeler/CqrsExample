@@ -12,7 +12,7 @@ namespace CommandProcessor.Tests.Entities
     public class EntityStoreTests
     {
         [Fact]
-        public void ShouldSaveEventsForEntity()
+        public async void ShouldSaveEventsForEntity()
         {
             var db = new Mock<IEventStore>();
             var entityStore = new EntityStore(db.Object);
@@ -49,7 +49,7 @@ namespace CommandProcessor.Tests.Entities
             entity.Apply(event2);
             entity.Apply(event3);
 
-            entityStore.Save<EntityFake>(entity);
+            await entityStore.Save<EntityFake>(entity);
 
             db.Verify(m => m.Save(event1), Times.Once);
             db.Verify(m => m.Save(event2), Times.Once);
