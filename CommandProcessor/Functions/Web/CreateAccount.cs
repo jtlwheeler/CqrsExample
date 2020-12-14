@@ -9,6 +9,8 @@ using Newtonsoft.Json;
 using CommandProcessor.Commands;
 using CommandProcessor.Commands.Commands;
 using System;
+using FluentValidation;
+using System.Linq;
 
 namespace CommandProcessor.Functions.Web
 {
@@ -30,6 +32,18 @@ namespace CommandProcessor.Functions.Web
 
             var content = await new StreamReader(req.Body).ReadToEndAsync();
             var createAccountRequest = JsonConvert.DeserializeObject<CreateAccountRequest>(content);
+
+            var validator = new CreateAccountRequestValidator();
+            var validationResult = validator.Validate(createAccountRequest);
+
+            if (!validationResult.IsValid)
+            {
+                return new BadRequestObjectResult(validationResult.Errors.Select(e => new
+                {
+                    Field = e.PropertyName,
+                    Error = e.ErrorMessage
+                }));
+            }
 
             var command = new OpenBankAccountCommand
             {
@@ -54,6 +68,14 @@ namespace CommandProcessor.Functions.Web
         public CreateAccountResponse(Guid accountId)
         {
             AccountId = accountId;
+        }
+    }
+
+    public class CreateAccountRequestValidator : AbstractValidator<CreateAccountRequest>
+    {
+        public CreateAccountRequestValidator()
+        {
+            RuleFor(x => x.Name).NotEmpty();
         }
     }
 }
