@@ -7,19 +7,14 @@ namespace CommandProcessor.Events.Persistence
 {
     public class CosmosDbEventStore : IEventStore
     {
-        private readonly CosmosClient client;
-        private string databaseId = "EventStore";
-        private string containerId = "Events";
-        public CosmosDbEventStore(CosmosClient client)
+        private readonly Container container;
+        public CosmosDbEventStore(Container container)
         {
-            this.client = client;
+            this.container = container;
         }
 
         public async Task Save(IEvent @event)
         {
-            Database database = await this.client.CreateDatabaseIfNotExistsAsync(databaseId);
-            Container container = await database.CreateContainerIfNotExistsAsync(containerId, "/id");
-
             if (@event is BankAccountCreatedEvent)
             {
                 await container.CreateItemAsync<BankAccountCreatedEvent>((BankAccountCreatedEvent)@event, new PartitionKey(@event.Id.ToString()));
