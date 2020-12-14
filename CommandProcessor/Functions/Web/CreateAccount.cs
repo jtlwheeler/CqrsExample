@@ -8,9 +8,8 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using CommandProcessor.Commands;
 using CommandProcessor.Commands.Commands;
-using System;
-using FluentValidation;
 using System.Linq;
+using FluentValidation.Results;
 
 namespace CommandProcessor.Functions.Web
 {
@@ -30,19 +29,13 @@ namespace CommandProcessor.Functions.Web
         {
             log.LogInformation("Create account");
 
-            var content = await new StreamReader(req.Body).ReadToEndAsync();
-            var createAccountRequest = JsonConvert.DeserializeObject<CreateAccountRequest>(content);
+            var createAccountRequest = await ParseBody(req);
 
-            var validator = new CreateAccountRequestValidator();
-            var validationResult = validator.Validate(createAccountRequest);
+            var validationResult = ValidateRequest(createAccountRequest);
 
             if (!validationResult.IsValid)
             {
-                return new BadRequestObjectResult(validationResult.Errors.Select(e => new
-                {
-                    Field = e.PropertyName,
-                    Error = e.ErrorMessage
-                }));
+                return CreateBadRequestResponse(validationResult);
             }
 
             var command = new OpenBankAccountCommand
@@ -54,28 +47,26 @@ namespace CommandProcessor.Functions.Web
 
             return new OkObjectResult(new CreateAccountResponse(result.Value));
         }
-    }
 
-    public class CreateAccountRequest
-    {
-        public string Name { get; set; }
-    }
-
-    public class CreateAccountResponse
-    {
-        public Guid AccountId { get; private set; }
-
-        public CreateAccountResponse(Guid accountId)
+        private async Task<CreateAccountRequest> ParseBody(HttpRequest request)
         {
-            AccountId = accountId;
+            var content = await new StreamReader(request.Body).ReadToEndAsync();
+            return JsonConvert.DeserializeObject<CreateAccountRequest>(content);
         }
-    }
 
-    public class CreateAccountRequestValidator : AbstractValidator<CreateAccountRequest>
-    {
-        public CreateAccountRequestValidator()
+        private ValidationResult ValidateRequest(CreateAccountRequest requestBody)
         {
-            RuleFor(x => x.Name).NotEmpty();
+            var validator = new CreateAccountRequestValidator();
+            return validator.Validate(requestBody);
+        }
+
+        private BadRequestObjectResult CreateBadRequestResponse(ValidationResult validationResult)
+        {
+            return new BadRequestObjectResult(validationResult.Errors.Select(e => new
+            {
+                Field = e.PropertyName,
+                Error = e.ErrorMessage
+            }));
         }
     }
 }
