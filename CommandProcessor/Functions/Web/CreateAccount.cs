@@ -36,7 +36,7 @@ namespace CommandProcessor.Functions.Web
                 Name = createAccountRequest.Name
             };
 
-            var result = commandBus.Handle(command);
+            var result = await commandBus.Handle(command);
 
             return new OkObjectResult(new CreateAccountResponse(result.Value));
         }

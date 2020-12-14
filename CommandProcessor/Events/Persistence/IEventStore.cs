@@ -1,7 +1,9 @@
+using System.Threading.Tasks;
+
 namespace CommandProcessor.Events.Persistence
 {
     public interface IEventStore
     {
-        public void Save(IEvent @event);
+        public Task Save(IEvent @event);
     }
 }

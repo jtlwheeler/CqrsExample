@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using CommandProcessor.Entities;
 using CommandProcessor.Events.Persistence;
 
@@ -12,11 +13,11 @@ namespace CommandProcessor.Commands.Entities
             this.db = db;
         }
 
-        public void Save<T>(T entity) where T : Entity
+        public async Task Save<T>(T entity) where T : Entity
         {
             foreach (var @event in entity.Changes)
             {
-                db.Save(@event);
+                await db.Save(@event);
             }
         }
     }

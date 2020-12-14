@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using CommandProcessor.Events.Events;
 using Microsoft.Azure.Cosmos;
 
@@ -14,7 +15,7 @@ namespace CommandProcessor.Events.Persistence
             this.client = client;
         }
 
-        public async void Save(IEvent @event)
+        public async Task Save(IEvent @event)
         {
             Database database = await this.client.CreateDatabaseIfNotExistsAsync(databaseId);
             Container container = await database.CreateContainerIfNotExistsAsync(containerId, "/id");

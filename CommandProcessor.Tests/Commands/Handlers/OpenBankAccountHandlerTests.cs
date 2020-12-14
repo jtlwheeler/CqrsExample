@@ -11,7 +11,7 @@ namespace CommandProcessor.Tests.Commands.Handlers
     public class OpenBankAccountHandlerTests
     {
         [Fact]
-        public void ShouldOpenBankAccountAndSaveEntity()
+        public async void ShouldOpenBankAccountAndSaveEntity()
         {
             var entityStore = new Mock<IEntityStore>();
             var handler = new OpenBankAccountHandler(entityStore.Object);
@@ -20,13 +20,13 @@ namespace CommandProcessor.Tests.Commands.Handlers
                 Name = "Bob Smith"
             };
 
-            handler.Handle(command);
+            await handler.Handle(command);
 
             entityStore.Verify(m => m.Save(It.IsAny<BankAccount>()));
         }
 
         [Fact]
-        public void ShouldReturnAccountIdOnSuccess()
+        public async void ShouldReturnAccountIdOnSuccess()
         {
             var entityStore = new Mock<IEntityStore>();
             var handler = new OpenBankAccountHandler(entityStore.Object);
@@ -35,7 +35,7 @@ namespace CommandProcessor.Tests.Commands.Handlers
                 Name = "Jane Smith"
             };
 
-            var result = handler.Handle(command);
+            var result = await handler.Handle(command);
 
             result.Success.Should().Be(true);
             result.Value.GetType().Should().Be(typeof(Guid));

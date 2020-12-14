@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using CommandProcessor.Commands.Commands;
 using CommandProcessor.Commands.Handlers;
 using CommandProcessor.Result;
@@ -14,12 +15,12 @@ namespace CommandProcessor.Commands
             this.openBankAccountHandler = openBankAccountHandler;
         }
 
-        public Result<Guid> Handle(ICommand command)
+        public async Task<Result<Guid>> Handle(ICommand command)
         {
 
             if (command is OpenBankAccountCommand)
             {
-                return openBankAccountHandler.Handle((OpenBankAccountCommand)command);
+                return await openBankAccountHandler.Handle((OpenBankAccountCommand)command);
             }
             else
             {
