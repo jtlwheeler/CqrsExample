@@ -17,7 +17,7 @@ namespace CommandProcessor.Events.Persistence
         {
             if (@event is BankAccountCreatedEvent)
             {
-                await container.CreateItemAsync<BankAccountCreatedEvent>((BankAccountCreatedEvent)@event, new PartitionKey(@event.Id.ToString()));
+                await container.CreateItemAsync<BankAccountCreatedEvent>((BankAccountCreatedEvent)@event, new PartitionKey(@event.EntityId.ToString()));
             }
         }
     }

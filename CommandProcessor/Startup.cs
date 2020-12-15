@@ -34,7 +34,7 @@ namespace CommandProcessor
         {
             var client = new CosmosClient(EndpointUri, PrimaryKey);
             Database database = client.CreateDatabaseIfNotExistsAsync(databaseId).GetAwaiter().GetResult();
-            return database.CreateContainerIfNotExistsAsync(containerId, "/id").GetAwaiter().GetResult();
+            return database.CreateContainerIfNotExistsAsync(containerId, "/EntityId").GetAwaiter().GetResult();
         }
     }
 }
