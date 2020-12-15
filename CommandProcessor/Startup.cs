@@ -12,11 +12,6 @@ namespace CommandProcessor
 {
     public class Startup : FunctionsStartup
     {
-        private static readonly string EndpointUri = "[ENDPOINT_URI]";
-        private static readonly string PrimaryKey = "[PRIMARY_KEY]";
-        private string databaseId = "EventStore";
-        private string containerId = "Events";
-
         public override void Configure(IFunctionsHostBuilder builder)
         {
             builder.Services.AddSingleton<Container>((s) =>
@@ -32,7 +27,10 @@ namespace CommandProcessor
 
         private Container ConfigureCosmosDb()
         {
-            var client = new CosmosClient(EndpointUri, PrimaryKey);
+            var databaseId = "EventStore";
+            var containerId = "Events";
+            var connectionString = Environment.GetEnvironmentVariable("CosmosDBConnection");
+            var client = new CosmosClient(connectionString);
             Database database = client.CreateDatabaseIfNotExistsAsync(databaseId).GetAwaiter().GetResult();
             return database.CreateContainerIfNotExistsAsync(containerId, "/EntityId").GetAwaiter().GetResult();
         }

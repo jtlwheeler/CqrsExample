@@ -11,7 +11,7 @@ using CommandProcessor.Commands.Commands;
 using System.Linq;
 using FluentValidation.Results;
 
-namespace CommandProcessor.Functions.Web
+namespace CommandProcessor.Functions.Web.CreateAccount
 {
     public class CreateAccount
     {

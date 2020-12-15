@@ -1,6 +1,6 @@
 using System;
 
-namespace CommandProcessor.Functions.Web
+namespace CommandProcessor.Functions.Web.CreateAccount
 {
     public class CreateAccountResponse
     {
