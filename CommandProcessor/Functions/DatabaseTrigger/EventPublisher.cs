@@ -3,13 +3,17 @@ using Microsoft.Azure.WebJobs;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using CommandProcessor.Events.Events;
+using CommandProcessor.Events;
 
 namespace CommandProcessor.Functions.DatabaseTrigger
 {
     public class EventPublisher
     {
-        public EventPublisher()
+        private readonly IEventBus eventBus;
+
+        public EventPublisher(IEventBus eventBus)
         {
+            this.eventBus = eventBus;
         }
 
         [FunctionName("EventPublisher")]
@@ -31,6 +35,7 @@ namespace CommandProcessor.Functions.DatabaseTrigger
                     log.LogInformation($"Event {document.Id} is a BankAccountCreatedEvent");
                     var bankAccountCreatedEvent = EventDeserializer.Deserialize<BankAccountCreatedEvent>(document.ToString());
                     log.LogInformation($"Successfully serialized BankAccountCreatedEvent. Hello, {bankAccountCreatedEvent.Name}!");
+                    eventBus.Publish(bankAccountCreatedEvent);
                 }
             }
         }
