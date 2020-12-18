@@ -10,6 +10,7 @@ namespace CommandProcessor.Functions.DatabaseTrigger
     public class EventPublisher
     {
         private readonly IEventBus eventBus;
+        private ILogger logger;
 
         public EventPublisher(IEventBus eventBus)
         {
@@ -25,19 +26,26 @@ namespace CommandProcessor.Functions.DatabaseTrigger
             CreateLeaseCollectionIfNotExists = true)]IReadOnlyList<Document> documents,
             ILogger log)
         {
-            log.LogInformation($"Documents modified: {documents.Count}");
+            logger = log;
+            logger.LogInformation($"Documents modified: {documents.Count}");
+
             foreach (var document in documents)
             {
-                log.LogInformation($"Document Id: {document.ToString()}");
+                logger.LogInformation($"Processing ID: {document.ToString()}");
 
                 if (document.GetPropertyValue<string>("Type") == "BankAccountCreatedEvent")
                 {
-                    log.LogInformation($"Event {document.Id} is a BankAccountCreatedEvent");
-                    var bankAccountCreatedEvent = EventDeserializer.Deserialize<BankAccountCreatedEvent>(document.ToString());
-                    log.LogInformation($"Successfully serialized BankAccountCreatedEvent. Hello, {bankAccountCreatedEvent.Name}!");
-                    eventBus.Publish(bankAccountCreatedEvent);
+                    ProcessBankAccountCreatedEvent(document);
                 }
             }
+        }
+
+        private void ProcessBankAccountCreatedEvent(Document document)
+        {
+            logger.LogInformation($"Event {document.Id} is a BankAccountCreatedEvent");
+
+            var bankAccountCreatedEvent = EventDeserializer.Deserialize<BankAccountCreatedEvent>(document.ToString());
+            eventBus.Publish(bankAccountCreatedEvent);
         }
     }
 }

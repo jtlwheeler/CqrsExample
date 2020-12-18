@@ -6,19 +6,20 @@ namespace CommandProcessor.Events
 {
     public class ServiceBusEventBus : IEventBus
     {
-        private ServiceBusClient serviceBusClient;
         private string queueName = "eventstream";
+        private readonly ServiceBusClient serviceBusClient;
+        private readonly ServiceBusSender serviceBusSender;
+
         public ServiceBusEventBus(ServiceBusClient serviceBusClient)
         {
             this.serviceBusClient = serviceBusClient;
+            serviceBusSender = serviceBusClient.CreateSender(queueName);
         }
 
         public async Task Publish<T>(T @event) where T : IEvent
         {
-            ServiceBusSender sender = serviceBusClient.CreateSender(queueName);
             ServiceBusMessage message = new ServiceBusMessage(JsonConvert.SerializeObject(@event));
-
-            await sender.SendMessageAsync(message);
+            await serviceBusSender.SendMessageAsync(message);
         }
     }
 }

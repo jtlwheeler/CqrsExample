@@ -2,11 +2,11 @@ using System;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 
-namespace CommandProcessor.Functions.SeviceBusTriger
+namespace CommandProcessor.Functions.SeviceBusTrigger
 {
     public class ReadStoreEventHandler
     {
-        [FunctionName("ServiceBusQueueTriggerCSharp")]                    
+        [FunctionName("ReadStoreEventHandler")]                    
         public static void Run(
             [ServiceBusTrigger("eventstream", Connection = "ServiceBusConnection")] 
             string myQueueItem,
