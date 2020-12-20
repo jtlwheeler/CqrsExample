@@ -2,6 +2,7 @@ using Azure.Messaging.ServiceBus;
 using CommandProcessor.Commands;
 using CommandProcessor.Commands.Entities;
 using CommandProcessor.Commands.Handlers;
+using CommandProcessor.Domain.BankAccount;
 using CommandProcessor.Events;
 using CommandProcessor.Events.Persistence;
 using Microsoft.Azure.Cosmos;
@@ -26,11 +27,17 @@ namespace CommandProcessor
                 return ConfigureServiceBusClient();
             });
 
+            builder.Services.AddSingleton<BankAccountContext>((s) =>
+            {
+                return ConfigureBankAccountContext();
+            });
+
             builder.Services.AddSingleton<IEventStore, CosmosDbEventStore>();
             builder.Services.AddSingleton<IEntityStore, EntityStore>();
             builder.Services.AddSingleton<IOpenBankAccountHandler, OpenBankAccountHandler>();
             builder.Services.AddSingleton<ICommandBus, CommandBus>();
             builder.Services.AddSingleton<IEventBus, ServiceBusEventBus>();
+            builder.Services.AddSingleton<IBankAccountRepository, BankAccountRepository>();
         }
 
         private Container ConfigureCosmosDb()
@@ -47,6 +54,15 @@ namespace CommandProcessor
         {
             var connectionString = Environment.GetEnvironmentVariable("ServiceBusConnection");
             return new ServiceBusClient(connectionString);
+        }
+
+        private BankAccountContext ConfigureBankAccountContext()
+        {
+            var accountEndpoint = Environment.GetEnvironmentVariable("CosmosDBAccountEndpoint");
+            var accountKey = Environment.GetEnvironmentVariable("CosmosDBAccountKey");
+            var context = new BankAccountContext(accountEndpoint, accountKey);
+            context.Database.EnsureCreatedAsync().GetAwaiter().GetResult();
+            return context;
         }
     }
 }

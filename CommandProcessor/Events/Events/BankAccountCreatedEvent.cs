@@ -4,6 +4,7 @@ namespace CommandProcessor.Events.Events
 {
     public class BankAccountCreatedEvent : IEvent
     {
+        public const string EventTypeName = "BankAccountCreatedEvent";
         public Guid Id { get; private set; }
         public Guid EntityId { get; private set; }
         public DateTime Timestamp { get; private set; }
@@ -16,7 +17,7 @@ namespace CommandProcessor.Events.Events
             Id = Guid.NewGuid();
             EntityId = accountId;
             Timestamp = DateTime.UtcNow;
-            Type = "BankAccountCreatedEvent";
+            Type = EventTypeName;
             Name = name;
             Version = version;
         }

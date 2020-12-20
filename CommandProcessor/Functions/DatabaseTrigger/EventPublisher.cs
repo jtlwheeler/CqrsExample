@@ -31,9 +31,9 @@ namespace CommandProcessor.Functions.DatabaseTrigger
 
             foreach (var document in documents)
             {
-                logger.LogInformation($"Processing ID: {document.ToString()}");
+                logger.LogInformation($"Processing document: {document.ToString()}");
 
-                if (document.GetPropertyValue<string>("Type") == "BankAccountCreatedEvent")
+                if (document.GetPropertyValue<string>("Type") == BankAccountCreatedEvent.EventTypeName)
                 {
                     ProcessBankAccountCreatedEvent(document);
                 }
@@ -42,7 +42,7 @@ namespace CommandProcessor.Functions.DatabaseTrigger
 
         private void ProcessBankAccountCreatedEvent(Document document)
         {
-            logger.LogInformation($"Event {document.Id} is a BankAccountCreatedEvent");
+            logger.LogInformation($"Event {document.Id} is a {BankAccountCreatedEvent.EventTypeName}");
 
             var bankAccountCreatedEvent = EventDeserializer.Deserialize<BankAccountCreatedEvent>(document.ToString());
             eventBus.Publish(bankAccountCreatedEvent);
