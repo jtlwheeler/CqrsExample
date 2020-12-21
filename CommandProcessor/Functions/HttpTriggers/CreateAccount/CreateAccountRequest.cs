@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace CommandProcessor.Functions.Web.CreateAccount
+namespace CommandProcessor.Functions.HttpTriggers.CreateAccount
 {
     public class CreateAccountRequest
     {

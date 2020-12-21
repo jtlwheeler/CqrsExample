@@ -11,7 +11,7 @@ using CommandProcessor.Commands.Commands;
 using System.Linq;
 using FluentValidation.Results;
 
-namespace CommandProcessor.Functions.Web.CreateAccount
+namespace CommandProcessor.Functions.HttpTriggers.CreateAccount
 {
     public class CreateAccount
     {
@@ -24,11 +24,9 @@ namespace CommandProcessor.Functions.Web.CreateAccount
 
         [FunctionName("CreateAccount")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "account")] HttpRequest req,
             ILogger log)
         {
-            log.LogInformation("Create account");
-
             var createAccountRequest = await ParseBody(req);
 
             var validationResult = ValidateRequest(createAccountRequest);

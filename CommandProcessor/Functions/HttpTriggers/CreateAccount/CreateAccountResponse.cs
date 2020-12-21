@@ -1,6 +1,6 @@
 using System;
 
-namespace CommandProcessor.Functions.Web.CreateAccount
+namespace CommandProcessor.Functions.HttpTriggers.CreateAccount
 {
     public class CreateAccountResponse
     {
