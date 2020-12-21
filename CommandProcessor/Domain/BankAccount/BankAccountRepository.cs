@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CommandProcessor.Domain.BankAccount
@@ -15,6 +16,11 @@ namespace CommandProcessor.Domain.BankAccount
         {
             context.Add(bankAccount);
             await context.SaveChangesAsync();
+        }
+
+        public async Task<BankAccount> Get(string id)
+        {
+            return await context.BankAccounts.FindAsync(id);
         }
     }
 }
