@@ -5,6 +5,7 @@ using Banking.CommandProcessor.Entities;
 using Banking.CommandProcessor.Events;
 using Banking.CommandProcessor.Events.EventStore;
 using Banking.QueryProcessor.Domain.BankAccount;
+using Banking.QueryProcessor.Queries.Handlers;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,6 +39,7 @@ namespace CommandProcessor
             builder.Services.AddSingleton<ICommandBus, CommandBus>();
             builder.Services.AddSingleton<IEventBus, ServiceBusEventBus>();
             builder.Services.AddSingleton<IBankAccountRepository, BankAccountRepository>();
+            builder.Services.AddSingleton<IBankAccountQueryHandler, BankAccountQueryHandler>();
         }
 
         private Container ConfigureCosmosDb()
