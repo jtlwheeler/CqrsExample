@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Banking.CommandProcessor.Commands.Commands;
 using Banking.CommandProcessor.Entities;
-using CommandProcessor.Result;
+using Banking.Result;
 
 namespace Banking.CommandProcessor.Commands.Handlers
 {

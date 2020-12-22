@@ -1,4 +1,4 @@
-namespace CommandProcessor.Result
+namespace Banking.Result
 {
     public class Result<T>
     {
