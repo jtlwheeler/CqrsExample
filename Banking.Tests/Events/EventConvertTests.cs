@@ -1,12 +1,11 @@
 using Xunit;
 using FluentAssertions;
 using System;
-using Banking.CommandProcessor.Functions.DatabaseTriggers;
 using Banking.Events;
 
 namespace Banking.Tests.CommandProcessor.Functions.DatabaseTrigger
 {
-    public class EventDeserializerTests
+    public class EventConvertTests
     {
         [Fact]
         public void WhenEventIsABankAccountCreatedEvent_ThenJsonIsDeserializedSuccessfully()
@@ -20,7 +19,7 @@ namespace Banking.Tests.CommandProcessor.Functions.DatabaseTrigger
                 + "\"Version\": 1"
                 + "}";
 
-            var bankAccountCreatedEvent = EventDeserializer.Deserialize<BankAccountCreatedEvent>(jsonEvent);
+            var bankAccountCreatedEvent = EventConvert.Deserialize<BankAccountCreatedEvent>(jsonEvent);
 
             bankAccountCreatedEvent.GetType().Should().Be(typeof(BankAccountCreatedEvent));
 

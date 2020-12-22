@@ -44,7 +44,7 @@ namespace Banking.CommandProcessor.Functions.DatabaseTriggers
         {
             logger.LogInformation($"Event {document.Id} is a {BankAccountCreatedEvent.EventTypeName}");
 
-            var bankAccountCreatedEvent = EventDeserializer.Deserialize<BankAccountCreatedEvent>(document.ToString());
+            var bankAccountCreatedEvent = EventConvert.Deserialize<BankAccountCreatedEvent>(document.ToString());
             eventBus.Publish(bankAccountCreatedEvent);
         }
     }

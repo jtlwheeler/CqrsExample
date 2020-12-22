@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using Banking.CommandProcessor.Functions.DatabaseTriggers;
 using Banking.Events;
 using Banking.QueryProcessor.Domain.BankAccount;
 using Microsoft.Azure.WebJobs;
@@ -38,7 +37,7 @@ namespace Banking.QueryProcessor.Functions.SeviceBusTriggers
             if (eventType == BankAccountCreatedEvent.EventTypeName)
             {
                 log.LogInformation("Received BankAccountCreatedEvent event on message bus.");
-                var bankAccountCreatedEvent = EventDeserializer.Deserialize<BankAccountCreatedEvent>(myQueueItem);
+                var bankAccountCreatedEvent = EventConvert.Deserialize<BankAccountCreatedEvent>(myQueueItem);
 
                 var newBankAccount = new BankAccount
                 {

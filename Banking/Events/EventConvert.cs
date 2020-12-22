@@ -1,9 +1,8 @@
-using Banking.Events;
 using Newtonsoft.Json;
 
-namespace Banking.CommandProcessor.Functions.DatabaseTriggers
+namespace Banking.Events
 {
-    public class EventDeserializer
+    public class EventConvert
     {
         public static T Deserialize<T>(string jsonEvent) where T : IEvent
         {
