@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandProcessor", "CommandProcessor\CommandProcessor.csproj", "{E5342A8A-0149-493B-A39F-5C539658B6D1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Banking", "Banking\Banking.csproj", "{E5342A8A-0149-493B-A39F-5C539658B6D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandProcessor.Tests", "CommandProcessor.Tests\CommandProcessor.Tests.csproj", "{7DC9ED63-4EAF-41B0-8C1D-A45088D44F68}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Banking.Tests", "Banking.Tests\Banking.Tests.csproj", "{7DC9ED63-4EAF-41B0-8C1D-A45088D44F68}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
