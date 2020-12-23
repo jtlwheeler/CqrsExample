@@ -28,7 +28,11 @@ namespace Banking.QueryProcessor.Functions.HttpTriggers.GetAccount
             var bankAccountQuery = new BankAccountQuery(id);
             var bankAccount = await bankAccountQueryHandler.Handle(bankAccountQuery);
 
-            var response = new AccountResponse(bankAccount.Id, bankAccount.AccountHolderName);
+            var response = new AccountResponse(
+                bankAccount.Id,
+                bankAccount.AccountHolderName,
+                bankAccount.Balance
+            );
 
             return new OkObjectResult(response);
         }

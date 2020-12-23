@@ -42,7 +42,8 @@ namespace Banking.QueryProcessor.Functions.SeviceBusTriggers
                 var newBankAccount = new BankAccount
                 {
                     Id = bankAccountCreatedEvent.EntityId.ToString(),
-                    AccountHolderName = bankAccountCreatedEvent.Name
+                    AccountHolderName = bankAccountCreatedEvent.Name,
+                    Balance = 0.0m
                 };
 
                 await bankAccountRepository.Save(newBankAccount);
