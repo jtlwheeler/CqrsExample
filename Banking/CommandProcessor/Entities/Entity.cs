@@ -5,7 +5,7 @@ namespace Banking.CommandProcessor.Entities
 {
     public abstract class Entity
     {
-        private int _nextVersionToAssign = 1;
+        protected int NextEventVersionToAssign => Changes.Count + 1;
 
         public List<IEvent> Changes { get; private set; }
 
@@ -21,7 +21,5 @@ namespace Banking.CommandProcessor.Entities
             When(@event);
             Changes.Add(@event);
         }
-
-        protected int GetVersionAndIncrement() => _nextVersionToAssign++;
     }
 }

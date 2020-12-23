@@ -20,7 +20,7 @@ namespace Banking.CommandProcessor.Entities
             var @event = new BankAccountCreatedEvent(
                 name,
                 newAccountId,
-                GetVersionAndIncrement()
+                NextEventVersionToAssign
             );
             Apply(@event);
         }
@@ -50,7 +50,7 @@ namespace Banking.CommandProcessor.Entities
                 description,
                 amount,
                 Id,
-                GetVersionAndIncrement()
+                NextEventVersionToAssign
             );
             Apply(@event);
         }
