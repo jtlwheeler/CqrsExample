@@ -113,5 +113,21 @@ namespace Banking.Tests.CommandProcessor.Entities
             var fourthEvent = account.Changes[3];
             fourthEvent.Version.Should().Be(4);
         }
+
+        [Fact]
+        public void WhenABankAccountIsAttemptedToBeOpenedForASecondTime_NothingHappens()
+        {
+            var account = new BankAccount();
+
+            account.Open("Jane Doe");
+
+            var accountId = account.Id;
+            account.Changes.Count.Should().Be(1);
+
+            account.Open("Jane Doe");
+
+            account.Changes.Count.Should().Be(1);
+            account.Id.Should().Be(accountId);
+        }
     }
 }

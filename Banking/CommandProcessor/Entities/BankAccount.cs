@@ -14,6 +14,11 @@ namespace Banking.CommandProcessor.Entities
 
         public void Open(string name)
         {
+            if (Id != default)
+            {
+                return;
+            }
+
             var newAccountId = Guid.NewGuid();
             var @event = new BankAccountCreatedEvent(
                 name,
