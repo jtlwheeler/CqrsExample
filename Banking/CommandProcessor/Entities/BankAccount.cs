@@ -29,7 +29,7 @@ namespace Banking.CommandProcessor.Entities
 
         public void MakeDeposit(string description, decimal amount)
         {
-            Balance = amount;
+            Balance += amount;
         }
     }
 }

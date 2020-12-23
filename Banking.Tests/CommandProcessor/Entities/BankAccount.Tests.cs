@@ -59,5 +59,19 @@ namespace Banking.Tests.CommandProcessor.Entities
             account.MakeDeposit("ADescriptionOfTheDeposit", 123.45m);
             account.Balance.Should().Be(123.45m);
         }
+
+        [Fact]
+        public void WhenMultipleDepositsAreMade_ThenTheBalanceIsAddedCorrectly()
+        {
+            var account = new BankAccount();
+
+            account.Open("Jane Doe");
+
+            account.Balance.Should().Be(0.0m);
+
+            account.MakeDeposit("First Deposit", 10.25m);
+            account.MakeDeposit("Second Deposit", 1.25m);
+            account.Balance.Should().Be(11.50m);
+        }
     }
 }
