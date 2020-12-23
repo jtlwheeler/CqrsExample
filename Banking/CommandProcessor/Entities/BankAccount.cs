@@ -30,6 +30,8 @@ namespace Banking.CommandProcessor.Entities
         public void MakeDeposit(string description, decimal amount)
         {
             Balance += amount;
+            var @event = new DepositMadeEvent(description, amount, Id, 0);
+            Apply(@event);
         }
     }
 }

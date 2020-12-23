@@ -73,5 +73,20 @@ namespace Banking.Tests.CommandProcessor.Entities
             account.MakeDeposit("Second Deposit", 1.25m);
             account.Balance.Should().Be(11.50m);
         }
+
+        [Fact]
+        public void WhenADepositIsMade_ThenADepositEventIsCreated()
+        {
+            var account = new BankAccount();
+
+            account.Open("Jane Doe");
+
+            account.MakeDeposit("ADescriptionOfTheDeposit", 123.45m);
+
+            var depositMadeEvent = (DepositMadeEvent)account.Changes[1];
+
+            depositMadeEvent.Amount.Should().Be(123.45m);
+            depositMadeEvent.Description.Should().Be("ADescriptionOfTheDeposit");
+        }
     }
 }
