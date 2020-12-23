@@ -9,9 +9,6 @@ namespace Banking.CommandProcessor.Entities
         public string Name { get; private set; }
         public decimal Balance { get; private set; }
 
-        private int _nextVersionToAssign = 1;
-        private int nextVersionToAssign => _nextVersionToAssign++;
-
         public void Open(string name)
         {
             if (Id != default)
@@ -23,7 +20,7 @@ namespace Banking.CommandProcessor.Entities
             var @event = new BankAccountCreatedEvent(
                 name,
                 newAccountId,
-                nextVersionToAssign
+                GetVersionAndIncrement()
             );
             Apply(@event);
         }
@@ -53,7 +50,7 @@ namespace Banking.CommandProcessor.Entities
                 description,
                 amount,
                 Id,
-                nextVersionToAssign
+                GetVersionAndIncrement()
             );
             Apply(@event);
         }
