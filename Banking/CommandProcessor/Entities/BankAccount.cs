@@ -7,6 +7,7 @@ namespace Banking.CommandProcessor.Entities
     {
         public Guid Id { get; private set; }
         public string Name { get; private set; }
+        public decimal Balance { get; private set; }
 
         public void Open(string name)
         {
@@ -24,6 +25,11 @@ namespace Banking.CommandProcessor.Entities
                     Id = accountCreatedEvent.EntityId;
                     break;
             }
+        }
+
+        public void MakeDeposit(string description, decimal amount)
+        {
+            Balance = amount;
         }
     }
 }

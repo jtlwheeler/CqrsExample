@@ -46,5 +46,18 @@ namespace Banking.Tests.CommandProcessor.Entities
             var accountOpenedEvent = (BankAccountCreatedEvent)account.Changes[0];
             accountOpenedEvent.Version.Should().Be(1);
         }
+
+        [Fact]
+        public void WhenADepositIsMade_ThenTheBalanceIncreases()
+        {
+            var account = new BankAccount();
+
+            account.Open("Jane Doe");
+
+            account.Balance.Should().Be(0.0m);
+
+            account.MakeDeposit("ADescriptionOfTheDeposit", 123.45m);
+            account.Balance.Should().Be(123.45m);
+        }
     }
 }
