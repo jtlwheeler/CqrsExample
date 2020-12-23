@@ -129,5 +129,15 @@ namespace Banking.Tests.CommandProcessor.Entities
             account.Changes.Count.Should().Be(1);
             account.Id.Should().Be(accountId);
         }
+
+        [Fact]
+        public void WhenADepositIsAttemptedToBeMadeBeforeAnAccountIsOpened_AnErrorOccurs()
+        {
+            var account = new BankAccount();
+
+            account.Invoking(a => a.MakeDeposit("A Deposit", 1))
+               .Should().Throw<EntityException>()
+               .WithMessage("Bank account must be opened before making a deposit.");
+        }
     }
 }

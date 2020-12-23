@@ -44,6 +44,11 @@ namespace Banking.CommandProcessor.Entities
 
         public void MakeDeposit(string description, decimal amount)
         {
+            if (Id == default)
+            {
+                throw new EntityException("Bank account must be opened before making a deposit.");
+            }
+
             var @event = new DepositMadeEvent(
                 description,
                 amount,
