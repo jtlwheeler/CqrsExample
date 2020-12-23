@@ -88,5 +88,30 @@ namespace Banking.Tests.CommandProcessor.Entities
             depositMadeEvent.Amount.Should().Be(123.45m);
             depositMadeEvent.Description.Should().Be("ADescriptionOfTheDeposit");
         }
+
+        [Fact]
+        public void WhenEventsAreCreated_ThenTheVersionNumberShouldBeIncremented()
+        {
+            var account = new BankAccount();
+
+            account.Open("Jane Doe");
+            account.MakeDeposit("First Deposit", 1m);
+            account.MakeDeposit("Second Deposit", 2m);
+            account.MakeDeposit("Thrird Deposit", 3m);
+
+            account.Changes.Count.Should().Be(4);
+
+            var firstEvent = account.Changes[0];
+            firstEvent.Version.Should().Be(1);
+
+            var secondEvent = account.Changes[1];
+            secondEvent.Version.Should().Be(2);
+
+            var thirdEvent = account.Changes[2];
+            thirdEvent.Version.Should().Be(3);
+
+            var fourthEvent = account.Changes[3];
+            fourthEvent.Version.Should().Be(4);
+        }
     }
 }

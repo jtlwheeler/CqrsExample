@@ -9,10 +9,12 @@ namespace Banking.CommandProcessor.Entities
         public string Name { get; private set; }
         public decimal Balance { get; private set; }
 
+        private int nextVersionToAssign = 1;
+
         public void Open(string name)
         {
             var newAccountId = Guid.NewGuid();
-            var @event = new BankAccountCreatedEvent(name, newAccountId, 1);
+            var @event = new BankAccountCreatedEvent(name, newAccountId, nextVersionToAssign++);
             Apply(@event);
         }
 
@@ -30,7 +32,7 @@ namespace Banking.CommandProcessor.Entities
         public void MakeDeposit(string description, decimal amount)
         {
             Balance += amount;
-            var @event = new DepositMadeEvent(description, amount, Id, 0);
+            var @event = new DepositMadeEvent(description, amount, Id, nextVersionToAssign++);
             Apply(@event);
         }
     }
