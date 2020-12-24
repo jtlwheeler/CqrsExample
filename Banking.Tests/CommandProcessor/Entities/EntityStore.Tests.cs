@@ -19,86 +19,34 @@ namespace Banking.Tests.CommandProcessor.Entities
             var db = new Mock<IEventStore>();
             var entityStore = new EntityStore(db.Object);
 
-            var entity = new EntityFake();
-            var event1 = new FakeEvent
-            {
-                Id = Guid.NewGuid(),
-                EntityId = Guid.NewGuid(),
-                Timestamp = DateTime.UtcNow,
-                Type = "FakeEvent",
-                Version = 1
-            };
-
-            var event2 = new FakeEvent
-            {
-                Id = Guid.NewGuid(),
-                EntityId = Guid.NewGuid(),
-                Timestamp = DateTime.UtcNow,
-                Type = "FakeEvent",
-                Version = 2
-            };
-
-            var event3 = new FakeEvent
-            {
-                Id = Guid.NewGuid(),
-                EntityId = Guid.NewGuid(),
-                Timestamp = DateTime.UtcNow,
-                Type = "FakeEvent",
-                Version = 3
-            };
-
-            entity.Apply(event1);
-            entity.Apply(event2);
-            entity.Apply(event3);
-
-            await entityStore.Save<EntityFake>(entity);
-
-            db.Verify(m => m.Save(event1), Times.Once);
-            db.Verify(m => m.Save(event2), Times.Once);
-            db.Verify(m => m.Save(event3), Times.Once);
-        }
-
-        [Fact]
-        public async void ShouldLoadEntityAndApplyStoredEvent()
-        {
             var entity = new EntityFake
             {
                 Id = Guid.NewGuid()
             };
 
-            var event1 = new FakeEvent
-            {
-                Id = Guid.NewGuid(),
-                EntityId = entity.Id,
-                Timestamp = DateTime.UtcNow,
-                Type = "FakeEvent",
-                Version = 1
-            };
+            entity.Increment();
+            entity.Increment();
+            entity.Increment();
 
-            var event2 = new FakeEvent
-            {
-                Id = Guid.NewGuid(),
-                EntityId = entity.Id,
-                Timestamp = DateTime.UtcNow,
-                Type = "FakeEvent",
-                Version = 2
-            };
+            await entityStore.Save<EntityFake>(entity);
 
-            var event3 = new FakeEvent
-            {
-                Id = Guid.NewGuid(),
-                EntityId = entity.Id,
-                Timestamp = DateTime.UtcNow,
-                Type = "FakeEvent",
-                Version = 3
-            };
+            db.Verify(m => m.Save(It.IsAny<FakeEvent>()), Times.Exactly(3));
+        }
 
+        [Fact]
+        public async void ShouldLoadEntityAndApplyStoredEvent()
+        {
             var db = new InMemoryEventStore();
             var entityStore = new EntityStore(db);
 
-            entity.Apply(event1);
-            entity.Apply(event2);
-            entity.Apply(event3);
+            var entity = new EntityFake
+            {
+                Id = Guid.NewGuid()
+            };
+
+            entity.Increment();
+            entity.Increment();
+            entity.Increment();
 
             await entityStore.Save(entity);
 
@@ -120,6 +68,20 @@ namespace Banking.Tests.CommandProcessor.Entities
             {
                 Count++;
             }
+        }
+
+        public void Increment()
+        {
+            var @event = new FakeEvent
+            {
+                Id = Guid.NewGuid(),
+                EntityId = Id,
+                Timestamp = DateTime.UtcNow,
+                Type = "FakeEvent",
+                Version = NextEventVersionToAssign
+            };
+
+            Apply(@event);
         }
     }
 

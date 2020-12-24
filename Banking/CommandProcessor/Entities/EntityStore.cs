@@ -19,11 +19,8 @@ namespace Banking.CommandProcessor.Entities
 
             var entity = new T();
 
-            Console.WriteLine($"Count: {events.Count}");
-
             foreach (var @event in events)
             {
-                Console.WriteLine($"Event - {@event.EntityId}");
                 entity.When(@event);
             }
 
