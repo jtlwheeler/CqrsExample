@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Banking.Events;
 using Microsoft.Azure.Cosmos;
@@ -10,6 +12,11 @@ namespace Banking.CommandProcessor.Events.EventStore
         public CosmosDbEventStore(Container container)
         {
             this.container = container;
+        }
+
+        public Task<List<IEvent>> GetEvents(Guid entityId)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task Save(IEvent @event)

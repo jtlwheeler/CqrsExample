@@ -25,7 +25,7 @@ namespace Banking.CommandProcessor.Entities
             Apply(@event);
         }
 
-        protected override void When(IEvent @event)
+        public override void When(IEvent @event)
         {
             switch (@event)
             {

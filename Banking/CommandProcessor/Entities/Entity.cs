@@ -14,7 +14,7 @@ namespace Banking.CommandProcessor.Entities
             Changes = new List<IEvent>();
         }
 
-        protected abstract void When(IEvent @event);
+        public abstract void When(IEvent @event);
 
         public void Apply(IEvent @event)
         {
