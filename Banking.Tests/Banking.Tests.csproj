@@ -25,4 +25,7 @@
     <ProjectReference Include="..\Banking\Banking.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="TestDoubles\" />
+  </ItemGroup>
 </Project>
