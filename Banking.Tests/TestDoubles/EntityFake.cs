@@ -9,7 +9,7 @@ namespace Banking.Tests.TestDoubles
         public Guid Id { get; set; }
         public int Count { get; private set; }
 
-        public override void When(IEvent @event)
+        protected override void When(IEvent @event)
         {
             if (@event is FakeEvent)
             {
