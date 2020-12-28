@@ -21,7 +21,7 @@ namespace Banking.CommandProcessor.Entities
 
             foreach (var @event in events)
             {
-                entity.Load(@event);
+                entity.Replay(@event);
             }
 
             return entity;

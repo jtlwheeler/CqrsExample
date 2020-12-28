@@ -17,7 +17,7 @@ namespace Banking.CommandProcessor.Entities
 
         protected abstract void When(IEvent @event);
 
-        public void Load(IEvent @event)
+        public void Replay(IEvent @event)
         {
             When(@event);
             NextEventVersionToAssign = @event.Version + 1;

@@ -20,7 +20,7 @@ namespace Banking.Tests.CommandProcessor.Entities
         }
 
         [Fact]
-        public void WhenAnEntityIsLoadedWithEvents_ThenTheNextEventVersionShouldBeInitializedProperly()
+        public void WhenAnEventsAreReplayed_ThenTheNextEventVersionShouldBeInitializedProperly()
         {
             var entity = new EntityFake
             {
@@ -45,8 +45,8 @@ namespace Banking.Tests.CommandProcessor.Entities
                 Version = 2
             };
 
-            entity.Load(event1);
-            entity.Load(event2);
+            entity.Replay(event1);
+            entity.Replay(event2);
 
             entity.Increment();
 
