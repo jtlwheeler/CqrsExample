@@ -2,7 +2,7 @@
 
 namespace Banking.CommandProcessor.Commands.Commands
 {
-    public class MakeDepositCommand
+    public class MakeDepositCommand: ICommand
     {
         public Guid AccountId { get; private set; }
         public decimal Amount { get; private set; }

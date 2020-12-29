@@ -4,22 +4,37 @@ using FluentAssertions;
 using Banking.CommandProcessor.Commands.Handlers;
 using Banking.CommandProcessor.Commands.Commands;
 using Banking.CommandProcessor.Commands;
+using System;
+using Banking.CommandProcessor.Entities;
+using Banking.Result;
 
 namespace Banking.Tests.CommandProcessor.Commands
 {
     public class CommandBusTests
     {
+        private readonly CommandBus commandBus;
+        private readonly Mock<IOpenBankAccountHandler> mockOpenBankAccountHandler;
+        private readonly Mock<IMakeDepositHandler> mockDepositHandler;
+
+
+        public CommandBusTests()
+        {
+            mockOpenBankAccountHandler = new Mock<IOpenBankAccountHandler>();
+            mockDepositHandler = new Mock<IMakeDepositHandler>();
+
+            commandBus = new CommandBus(
+                mockOpenBankAccountHandler.Object,
+                mockDepositHandler.Object
+            );
+        }
+
         [Fact]
         public async void WhenAOpenAccountCommandIsSentOnTheCommandBus_ThenTheCorrectHandlerShouldBeCalled()
         {
-            var mockOpenBankAccountHandler = new Mock<IOpenBankAccountHandler>();
-
             var command = new OpenBankAccountCommand
             {
                 Name = "Jane Doe"
             };
-
-            var commandBus = new CommandBus(mockOpenBankAccountHandler.Object);
 
             await commandBus.Handle(command);
 
@@ -29,13 +44,28 @@ namespace Banking.Tests.CommandProcessor.Commands
         [Fact]
         public void ShouldRaiseError_WhenAnUnknownCommandIsPassed()
         {
-            var mockOpenBankAccountHandler = new Mock<IOpenBankAccountHandler>();
-            var commandBus = new CommandBus(mockOpenBankAccountHandler.Object);
-
             var command = new UnknownCommand();
 
             commandBus.Invoking(bus => bus.Handle(command))
                 .Should().Throw<UnknownCommandException>();
+        }
+
+        [Fact]
+        public async void MakeDepsoitCommandIsSentOnTheCommandBus_ThenTheCorrectHandlerShouldBeCalled()
+        {
+            var depositId = new DepositId();
+            mockDepositHandler
+                .Setup(mock => mock.Handle(It.IsAny<MakeDepositCommand>()))
+                .ReturnsAsync(Result<DepositId>.Ok(depositId));
+
+            var command = new MakeDepositCommand(Guid.NewGuid(), 1.23m, "A Purchase");
+
+            var result = await commandBus.Handle(command);
+
+            mockDepositHandler.Verify(mock => mock.Handle(command));
+
+            result.Success.Should().Be(true);
+            result.Value.Should().Be(depositId.Id);
         }
 
         class UnknownCommand : ICommand

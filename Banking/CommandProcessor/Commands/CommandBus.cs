@@ -8,11 +8,13 @@ namespace Banking.CommandProcessor.Commands
 {
     public class CommandBus : ICommandBus
     {
-        private IOpenBankAccountHandler openBankAccountHandler;
+        private readonly IOpenBankAccountHandler openBankAccountHandler;
+        private readonly IMakeDepositHandler makeDepositHandler;
 
-        public CommandBus(IOpenBankAccountHandler openBankAccountHandler)
+        public CommandBus(IOpenBankAccountHandler openBankAccountHandler, IMakeDepositHandler makeDepositHandler)
         {
             this.openBankAccountHandler = openBankAccountHandler;
+            this.makeDepositHandler = makeDepositHandler;
         }
 
         public async Task<Result<Guid>> Handle(ICommand command)
@@ -21,6 +23,11 @@ namespace Banking.CommandProcessor.Commands
             if (command is OpenBankAccountCommand)
             {
                 return await openBankAccountHandler.Handle((OpenBankAccountCommand)command);
+            }
+            else if (command is MakeDepositCommand)
+            {
+                var result = await makeDepositHandler.Handle((MakeDepositCommand)command);
+                return Result<Guid>.Ok(result.Value.Id);
             }
             else
             {
