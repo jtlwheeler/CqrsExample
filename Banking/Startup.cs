@@ -40,6 +40,7 @@ namespace CommandProcessor
             builder.Services.AddSingleton<IEventBus, ServiceBusEventBus>();
             builder.Services.AddSingleton<IBankAccountRepository, BankAccountRepository>();
             builder.Services.AddSingleton<IBankAccountQueryHandler, BankAccountQueryHandler>();
+            builder.Services.AddSingleton<IMakeDepositHandler, MakeDepositHandler>();
         }
 
         private Container ConfigureCosmosDb()

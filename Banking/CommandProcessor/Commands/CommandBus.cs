@@ -19,7 +19,6 @@ namespace Banking.CommandProcessor.Commands
 
         public async Task<Result<Guid>> Handle(ICommand command)
         {
-
             if (command is OpenBankAccountCommand)
             {
                 return await openBankAccountHandler.Handle((OpenBankAccountCommand)command);

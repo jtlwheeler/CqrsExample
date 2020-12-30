@@ -27,44 +27,24 @@ namespace Banking.CommandProcessor.Functions.HttpTriggers.CreateAccount
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = "account")] HttpRequest req,
             ILogger log)
         {
-            var createAccountRequest = await ParseBody(req);
-
-            var validationResult = ValidateRequest(createAccountRequest);
+            var validationResult = await req.ValidateRequest<CreateAccountRequest, CreateAccountRequestValidator>();
 
             if (!validationResult.IsValid)
             {
-                return CreateBadRequestResponse(validationResult);
+                log.LogInformation("Invalid request.");
+                return validationResult.ToBadRequest();
             }
+
+            var validatedRequest = validationResult.Value;
 
             var command = new OpenBankAccountCommand
             {
-                Name = createAccountRequest.Name
+                Name = validatedRequest.Name
             };
 
             var result = await commandBus.Handle(command);
 
             return new OkObjectResult(new CreateAccountResponse(result.Value));
-        }
-
-        private async Task<CreateAccountRequest> ParseBody(HttpRequest request)
-        {
-            var content = await new StreamReader(request.Body).ReadToEndAsync();
-            return JsonConvert.DeserializeObject<CreateAccountRequest>(content);
-        }
-
-        private ValidationResult ValidateRequest(CreateAccountRequest requestBody)
-        {
-            var validator = new CreateAccountRequestValidator();
-            return validator.Validate(requestBody);
-        }
-
-        private BadRequestObjectResult CreateBadRequestResponse(ValidationResult validationResult)
-        {
-            return new BadRequestObjectResult(validationResult.Errors.Select(e => new
-            {
-                Field = e.PropertyName,
-                Error = e.ErrorMessage
-            }));
         }
     }
 }

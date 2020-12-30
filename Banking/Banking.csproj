@@ -23,4 +23,7 @@
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CommandProcessor\Functions\HttpTriggers\MakeDeposit\" />
+  </ItemGroup>
 </Project>
