@@ -1,4 +1,5 @@
 using System;
+using Banking.CommandProcessor.Events;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -20,8 +21,12 @@ namespace Banking.Events
             {
                 return JsonConvert.DeserializeObject<BankAccountCreatedEvent>(jsonEvent);
             }
+            else if (eventType == DepositMadeEvent.EventTypeName)
+            {
+                return JsonConvert.DeserializeObject<DepositMadeEvent>(jsonEvent);
+            }
 
-            throw new Exception("Invalid Event Type.");
+            throw new UnprocessableEventException("Invalid Event Type.");
         }
     }
 }

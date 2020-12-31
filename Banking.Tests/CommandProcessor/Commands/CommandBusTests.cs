@@ -53,10 +53,10 @@ namespace Banking.Tests.CommandProcessor.Commands
         [Fact]
         public async void MakeDepsoitCommandIsSentOnTheCommandBus_ThenTheCorrectHandlerShouldBeCalled()
         {
-            var depositId = new DepositId();
+            var depositId = Guid.NewGuid();
             mockDepositHandler
                 .Setup(mock => mock.Handle(It.IsAny<MakeDepositCommand>()))
-                .ReturnsAsync(Result<DepositId>.Ok(depositId));
+                .ReturnsAsync(Result<Guid>.Ok(depositId));
 
             var command = new MakeDepositCommand(Guid.NewGuid(), 1.23m, "A Purchase");
 
@@ -65,7 +65,7 @@ namespace Banking.Tests.CommandProcessor.Commands
             mockDepositHandler.Verify(mock => mock.Handle(command));
 
             result.Success.Should().Be(true);
-            result.Value.Should().Be(depositId.Id);
+            result.Value.Should().Be(depositId);
         }
 
         class UnknownCommand : ICommand

@@ -39,14 +39,14 @@ namespace Banking.CommandProcessor.Entities
             }
         }
 
-        public DepositId MakeDeposit(string description, decimal amount)
+        public Guid MakeDeposit(string description, decimal amount)
         {
             if (Id == default)
             {
                 throw new EntityException("Bank account must be opened before making a deposit.");
             }
 
-            var depositId = new DepositId();
+            var depositId = Guid.NewGuid();
 
             var @event = new DepositMadeEvent(
                 depositId,

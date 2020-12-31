@@ -33,9 +33,8 @@ namespace Banking.Tests.CommandProcessor.Commands.Handlers
             commandResult.Success.Should().Be(true);
 
             var depositId = commandResult.Value;
-            depositId.Should().BeOfType<DepositId>();
-            depositId.Id.Should().NotBe(default);
-            depositId.Id.Should().NotBe(accountId);
+            depositId.Should().NotBe(default);
+            depositId.Should().NotBe(accountId);
 
             entityStore.Verify(m => m.Save(It.IsAny<BankAccount>()));
             entityStore.Verify(m => m.Load<BankAccount>(accountId));

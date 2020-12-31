@@ -26,7 +26,7 @@ namespace Banking.CommandProcessor.Commands
             else if (command is MakeDepositCommand)
             {
                 var result = await makeDepositHandler.Handle((MakeDepositCommand)command);
-                return Result<Guid>.Ok(result.Value.Id);
+                return Result<Guid>.Ok(result.Value);
             }
             else
             {
