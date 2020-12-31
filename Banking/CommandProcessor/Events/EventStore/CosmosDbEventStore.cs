@@ -54,9 +54,16 @@ namespace Banking.CommandProcessor.Events.EventStore
 
         public async Task Save(IEvent @event)
         {
-            if (@event is BankAccountCreatedEvent)
+            switch (@event)
             {
-                await container.CreateItemAsync<BankAccountCreatedEvent>((BankAccountCreatedEvent)@event, new PartitionKey(@event.EntityId.ToString()));
+                case BankAccountCreatedEvent bankAccountCreatedEvent:
+                    await container.CreateItemAsync(bankAccountCreatedEvent, new PartitionKey(bankAccountCreatedEvent.EntityId.ToString()));
+                    break;
+                case DepositMadeEvent depositMadeEvent:
+                    await container.CreateItemAsync(depositMadeEvent, new PartitionKey(depositMadeEvent.EntityId.ToString()));
+                    break;
+                default:
+                    throw new UnprocessableEventException($"Unable to save event. {@event}");
             }
         }
     }
