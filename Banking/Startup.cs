@@ -50,7 +50,7 @@ namespace CommandProcessor
             var connectionString = Environment.GetEnvironmentVariable("CosmosDBConnection");
             var client = new CosmosClient(connectionString);
             Database database = client.CreateDatabaseIfNotExistsAsync(databaseId).GetAwaiter().GetResult();
-            return database.CreateContainerIfNotExistsAsync(containerId, "/EntityId").GetAwaiter().GetResult();
+            return database.CreateContainerIfNotExistsAsync(containerId, "/AggregateRootId").GetAwaiter().GetResult();
         }
 
         private ServiceBusClient ConfigureServiceBusClient()

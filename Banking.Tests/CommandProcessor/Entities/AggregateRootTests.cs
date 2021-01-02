@@ -5,12 +5,12 @@ using Xunit;
 
 namespace Banking.Tests.CommandProcessor.Entities
 {
-    public class EntityTests
+    public class AggregateRootTests
     {
         [Fact]
         public void WhenAnEntityIsCreated_ThenTheFirstEventVersionToAssignedShouldBeOne()
         {
-            var entity = new EntityFake();
+            var entity = new AggregateRootFake();
 
             entity.Increment();
 
@@ -22,7 +22,7 @@ namespace Banking.Tests.CommandProcessor.Entities
         [Fact]
         public void WhenAnEventsAreReplayed_ThenTheNextEventVersionShouldBeInitializedProperly()
         {
-            var entity = new EntityFake
+            var entity = new AggregateRootFake
             {
                 Id = Guid.NewGuid()
             };
@@ -30,6 +30,7 @@ namespace Banking.Tests.CommandProcessor.Entities
             var event1 = new FakeEvent
             {
                 Id = Guid.NewGuid(),
+                AggregateRootId = entity.Id,
                 EntityId = entity.Id,
                 Timestamp = DateTime.UtcNow,
                 Type = "FakeEvent",
@@ -39,6 +40,7 @@ namespace Banking.Tests.CommandProcessor.Entities
             var event2 = new FakeEvent
             {
                 Id = Guid.NewGuid(),
+                AggregateRootId = entity.Id,
                 EntityId = entity.Id,
                 Timestamp = DateTime.UtcNow,
                 Type = "FakeEvent",

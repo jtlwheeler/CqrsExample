@@ -13,7 +13,7 @@ namespace Banking.CommandProcessor.Entities
             this.db = db;
         }
 
-        public async Task<T> Load<T>(Guid entityId) where T : Entity, new()
+        public async Task<T> Load<T>(Guid entityId) where T : AggregateRoot, new()
         {
             var events = await db.GetEvents(entityId);
 
@@ -27,7 +27,7 @@ namespace Banking.CommandProcessor.Entities
             return entity;
         }
 
-        public async Task Save<T>(T entity) where T : Entity
+        public async Task Save<T>(T entity) where T : AggregateRoot
         {
             foreach (var @event in entity.Changes)
             {

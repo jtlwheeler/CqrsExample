@@ -16,7 +16,7 @@ namespace Banking.Tests.CommandProcessor.Entities
             var db = new Mock<IEventStore>();
             var entityStore = new EntityStore(db.Object);
 
-            var entity = new EntityFake
+            var entity = new AggregateRootFake
             {
                 Id = Guid.NewGuid()
             };
@@ -25,7 +25,7 @@ namespace Banking.Tests.CommandProcessor.Entities
             entity.Increment();
             entity.Increment();
 
-            await entityStore.Save<EntityFake>(entity);
+            await entityStore.Save<AggregateRootFake>(entity);
 
             db.Verify(m => m.Save(It.IsAny<FakeEvent>()), Times.Exactly(3));
         }
@@ -36,7 +36,7 @@ namespace Banking.Tests.CommandProcessor.Entities
             var db = new InMemoryEventStore();
             var entityStore = new EntityStore(db);
 
-            var entity = new EntityFake
+            var entity = new AggregateRootFake
             {
                 Id = Guid.NewGuid()
             };
@@ -47,7 +47,7 @@ namespace Banking.Tests.CommandProcessor.Entities
 
             await entityStore.Save(entity);
 
-            var loadedEntity = await entityStore.Load<EntityFake>(entity.Id);
+            var loadedEntity = await entityStore.Load<AggregateRootFake>(entity.Id);
 
             loadedEntity.Changes.Count.Should().Be(0);
             loadedEntity.Count.Should().Be(3);

@@ -5,7 +5,7 @@ namespace Banking.CommandProcessor.Entities
 {
     public interface IEntityStore
     {
-        public Task Save<T>(T entity) where T : Entity;
-        public Task<T> Load<T>(Guid entityId) where T : Entity, new();
+        public Task Save<T>(T entity) where T : AggregateRoot;
+        public Task<T> Load<T>(Guid entityId) where T : AggregateRoot, new();
     }
 }

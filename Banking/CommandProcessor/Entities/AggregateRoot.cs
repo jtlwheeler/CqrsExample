@@ -3,13 +3,13 @@ using Banking.Events;
 
 namespace Banking.CommandProcessor.Entities
 {
-    public abstract class Entity
+    public abstract class AggregateRoot
     {
         protected int NextEventVersionToAssign { get; private set; }
 
         public List<IEvent> Changes { get; private set; }
 
-        protected Entity()
+        protected AggregateRoot()
         {
             Changes = new List<IEvent>();
             NextEventVersionToAssign = 1;

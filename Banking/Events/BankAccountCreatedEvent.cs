@@ -6,6 +6,7 @@ namespace Banking.Events
     {
         public const string EventTypeName = "BankAccountCreatedEvent";
         public Guid Id { get; private set; }
+        public Guid AggregateRootId { get; private set; }
         public Guid EntityId { get; private set; }
         public DateTime Timestamp { get; private set; }
         public string Type { get; private set; }
@@ -15,6 +16,7 @@ namespace Banking.Events
         public BankAccountCreatedEvent(string name, Guid accountId, int version)
         {
             Id = Guid.NewGuid();
+            AggregateRootId = accountId;
             EntityId = accountId;
             Timestamp = DateTime.UtcNow;
             Type = EventTypeName;

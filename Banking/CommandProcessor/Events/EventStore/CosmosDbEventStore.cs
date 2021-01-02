@@ -57,10 +57,10 @@ namespace Banking.CommandProcessor.Events.EventStore
             switch (@event)
             {
                 case BankAccountCreatedEvent bankAccountCreatedEvent:
-                    await container.CreateItemAsync(bankAccountCreatedEvent, new PartitionKey(bankAccountCreatedEvent.EntityId.ToString()));
+                    await container.CreateItemAsync(bankAccountCreatedEvent, new PartitionKey(bankAccountCreatedEvent.AggregateRootId.ToString()));
                     break;
                 case DepositMadeEvent depositMadeEvent:
-                    await container.CreateItemAsync(depositMadeEvent, new PartitionKey(depositMadeEvent.EntityId.ToString()));
+                    await container.CreateItemAsync(depositMadeEvent, new PartitionKey(depositMadeEvent.AggregateRootId.ToString()));
                     break;
                 default:
                     throw new UnprocessableEventException($"Unable to save event. {@event}");

@@ -9,6 +9,8 @@ namespace Banking.Events
         Guid Id { get; }
         [JsonProperty(PropertyName = "EntityId")]
         Guid EntityId { get; }
+        [JsonProperty(PropertyName = "AggregateRootId")]
+        Guid AggregateRootId { get; }
         [JsonProperty(PropertyName = "Timestamp")]
         DateTime Timestamp { get; }
         string Type { get; }

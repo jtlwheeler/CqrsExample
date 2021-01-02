@@ -8,6 +8,6 @@ namespace Banking.CommandProcessor.Events.EventStore
     public interface IEventStore
     {
         public Task Save(IEvent @event);
-        public Task<List<IEvent>> GetEvents(Guid entityId);
+        public Task<List<IEvent>> GetEvents(Guid aggregateRootId);
     }
 }

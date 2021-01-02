@@ -32,6 +32,7 @@ namespace Banking.Tests.CommandProcessor.Entities
             accountOpenedEvent.Id.Should().NotBeEmpty();
             accountOpenedEvent.Timestamp.Should().BeCloseTo(DateTime.UtcNow);
             accountOpenedEvent.EntityId.Should().Be(account.Id);
+            accountOpenedEvent.AggregateRootId.Should().Be(account.Id);
             accountOpenedEvent.Type.Should().Be("BankAccountCreatedEvent");
             accountOpenedEvent.Name.Should().Be("John Doe");
         }

@@ -21,11 +21,11 @@ namespace Banking.Tests.TestDoubles
             await Task.Run(() => SavedEvents.Add(@event));
         }
 
-        public async Task<List<IEvent>> GetEvents(Guid entityId)
+        public async Task<List<IEvent>> GetEvents(Guid aggregateRootId)
         {
             return await Task.Run(() =>
                 SavedEvents
-                    .Where(@event => @event.EntityId == entityId)
+                    .Where(@event => @event.AggregateRootId == aggregateRootId)
                     .OrderBy(@event => @event.Version)
                     .ToList()
             );

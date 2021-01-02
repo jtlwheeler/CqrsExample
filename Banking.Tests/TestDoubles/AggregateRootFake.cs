@@ -4,7 +4,7 @@ using Banking.Events;
 
 namespace Banking.Tests.TestDoubles
 {
-    public class EntityFake : Entity
+    public class AggregateRootFake : AggregateRoot
     {
         public Guid Id { get; set; }
         public int Count { get; private set; }
@@ -23,6 +23,7 @@ namespace Banking.Tests.TestDoubles
             {
                 Id = Guid.NewGuid(),
                 EntityId = Id,
+                AggregateRootId = Id,
                 Timestamp = DateTime.UtcNow,
                 Type = "FakeEvent",
                 Version = NextEventVersionToAssign

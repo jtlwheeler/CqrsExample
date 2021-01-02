@@ -3,7 +3,7 @@ using Banking.Events;
 
 namespace Banking.CommandProcessor.Entities
 {
-    public class BankAccount: Entity
+    public class BankAccount: AggregateRoot
     {
         public Guid Id { get; private set; }
         public string Name { get; private set; }
