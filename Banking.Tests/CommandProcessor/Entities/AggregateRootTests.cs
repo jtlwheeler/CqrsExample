@@ -10,7 +10,10 @@ namespace Banking.Tests.CommandProcessor.Entities
         [Fact]
         public void WhenAnEntityIsCreated_ThenTheFirstEventVersionToAssignedShouldBeOne()
         {
-            var entity = new AggregateRootFake();
+            var entity = new AggregateRootFake
+            {
+                Id = new FakeId()
+            };
 
             entity.Increment();
 
@@ -24,14 +27,14 @@ namespace Banking.Tests.CommandProcessor.Entities
         {
             var entity = new AggregateRootFake
             {
-                Id = Guid.NewGuid()
+                Id = new FakeId()
             };
 
             var event1 = new FakeEvent
             {
                 Id = Guid.NewGuid(),
-                AggregateRootId = entity.Id,
-                EntityId = entity.Id,
+                AggregateRootId = entity.Id.Value,
+                EntityId = entity.Id.Value,
                 Timestamp = DateTime.UtcNow,
                 Type = "FakeEvent",
                 Version = 1
@@ -40,8 +43,8 @@ namespace Banking.Tests.CommandProcessor.Entities
             var event2 = new FakeEvent
             {
                 Id = Guid.NewGuid(),
-                AggregateRootId = entity.Id,
-                EntityId = entity.Id,
+                AggregateRootId = entity.Id.Value,
+                EntityId = entity.Id.Value,
                 Timestamp = DateTime.UtcNow,
                 Type = "FakeEvent",
                 Version = 2

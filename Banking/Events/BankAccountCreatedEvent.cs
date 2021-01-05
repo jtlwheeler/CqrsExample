@@ -2,7 +2,7 @@ using System;
 
 namespace Banking.Events
 {
-    public class BankAccountCreatedEvent : IEvent
+    public class BankAccountCreatedEvent: IEvent
     {
         public const string EventTypeName = "BankAccountCreatedEvent";
         public Guid Id { get; private set; }

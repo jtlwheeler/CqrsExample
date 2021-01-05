@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Banking.CommandProcessor.Commands.Commands;
 using Banking.CommandProcessor.Entities;
@@ -15,14 +14,14 @@ namespace Banking.CommandProcessor.Commands.Handlers
             this.entityStore = entityStore;
         }
 
-        public async Task<Result<Guid>> Handle(OpenBankAccountCommand command)
+        public async Task<Result<EntityId>> Handle(OpenBankAccountCommand command)
         {
             var newBankAccount = new BankAccount();
             newBankAccount.Open(command.Name);
 
             await entityStore.Save(newBankAccount);
 
-            return Result<Guid>.Ok(newBankAccount.Id);
+            return Result<EntityId>.Ok(newBankAccount.Id);
         }
     }
 }

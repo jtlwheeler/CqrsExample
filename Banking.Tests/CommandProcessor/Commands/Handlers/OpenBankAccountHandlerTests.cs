@@ -38,7 +38,7 @@ namespace Banking.Tests.CommandProcessor.Commands.Handlers
             var result = await handler.Handle(command);
 
             result.Success.Should().Be(true);
-            result.Value.GetType().Should().Be(typeof(Guid));
+            result.Value.Value.GetType().Should().Be(typeof(Guid));
         }
     }
 }

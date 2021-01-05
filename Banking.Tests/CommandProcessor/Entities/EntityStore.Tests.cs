@@ -18,7 +18,7 @@ namespace Banking.Tests.CommandProcessor.Entities
 
             var entity = new AggregateRootFake
             {
-                Id = Guid.NewGuid()
+                Id = new FakeId()
             };
 
             entity.Increment();
@@ -38,7 +38,7 @@ namespace Banking.Tests.CommandProcessor.Entities
 
             var entity = new AggregateRootFake
             {
-                Id = Guid.NewGuid()
+                Id = new FakeId()
             };
 
             entity.Increment();

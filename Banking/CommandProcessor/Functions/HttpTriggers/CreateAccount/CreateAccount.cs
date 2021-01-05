@@ -1,13 +1,9 @@
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using System.Linq;
-using FluentValidation.Results;
 using Banking.CommandProcessor.Commands;
 using Banking.CommandProcessor.Commands.Commands;
 
@@ -44,7 +40,7 @@ namespace Banking.CommandProcessor.Functions.HttpTriggers.CreateAccount
 
             var result = await commandBus.Handle(command);
 
-            return new OkObjectResult(new CreateAccountResponse(result.Value));
+            return new OkObjectResult(new CreateAccountResponse(result.Value.Value));
         }
     }
 }

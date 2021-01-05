@@ -1,11 +1,10 @@
-using System;
 using Banking.Events;
 
 namespace Banking.CommandProcessor.Entities
 {
     public class BankAccount: AggregateRoot
     {
-        public Guid Id { get; private set; }
+        public AccountId Id { get; private set; }
         public string Name { get; private set; }
         public decimal Balance { get; private set; }
 
@@ -16,10 +15,10 @@ namespace Banking.CommandProcessor.Entities
                 return;
             }
 
-            var newAccountId = Guid.NewGuid();
+            var newAccountId = new AccountId();
             var @event = new BankAccountCreatedEvent(
                 name,
-                newAccountId,
+                newAccountId.Value,
                 NextEventVersionToAssign
             );
             Apply(@event);
@@ -31,7 +30,7 @@ namespace Banking.CommandProcessor.Entities
             {
                 case BankAccountCreatedEvent accountCreatedEvent:
                     Name = accountCreatedEvent.Name;
-                    Id = accountCreatedEvent.EntityId;
+                    Id = new AccountId(accountCreatedEvent.EntityId);
                     break;
                 case DepositMadeEvent e:
                     Balance += e.Amount;
@@ -39,20 +38,20 @@ namespace Banking.CommandProcessor.Entities
             }
         }
 
-        public Guid MakeDeposit(string description, decimal amount)
+        public DepositId MakeDeposit(string description, decimal amount)
         {
             if (Id == default)
             {
                 throw new EntityException("Bank account must be opened before making a deposit.");
             }
 
-            var depositId = Guid.NewGuid();
+            var depositId = new DepositId();
 
             var @event = new DepositMadeEvent(
-                depositId,
+                depositId.Value,
                 description,
                 amount,
-                Id,
+                Id.Value,
                 NextEventVersionToAssign
             );
             Apply(@event);

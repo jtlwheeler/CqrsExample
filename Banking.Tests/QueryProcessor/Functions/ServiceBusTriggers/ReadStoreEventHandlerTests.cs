@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Banking.QueryProcessor.Domain.BankAccount;
 using Banking.QueryProcessor.Functions.SeviceBusTriggers;
 using Banking.Events;
+using Banking.CommandProcessor.Entities;
 
 namespace Banking.Tests.QueryProcessor.Functions.ServiceBusTriggers
 {
@@ -18,14 +19,14 @@ namespace Banking.Tests.QueryProcessor.Functions.ServiceBusTriggers
             var mockLogger = new Mock<ILogger>();
             var readerStoreEventHandler = new ReadStoreEventHandler(mockBankAccountRepository.Object);
 
-            var bankAccountId = Guid.NewGuid();
-            var bankAccountCreatedEvent = new BankAccountCreatedEvent("John Doe", bankAccountId, 1);
+            var bankAccountId = new AccountId();
+            var bankAccountCreatedEvent = new BankAccountCreatedEvent("John Doe", bankAccountId.Value, 1);
 
             var jsonData = JsonConvert.SerializeObject(bankAccountCreatedEvent);
             await readerStoreEventHandler.Run(jsonData, 1, DateTime.UtcNow, "1", mockLogger.Object);
 
             mockBankAccountRepository.Verify(
-                m => m.Save(It.Is<BankAccount>(p => p.Id == bankAccountId.ToString() && p.AccountHolderName == "John Doe"))
+                m => m.Save(It.Is<Banking.QueryProcessor.Domain.BankAccount.BankAccount>(p => p.Id == bankAccountId.Value.ToString() && p.AccountHolderName == "John Doe"))
             );
         }
     }

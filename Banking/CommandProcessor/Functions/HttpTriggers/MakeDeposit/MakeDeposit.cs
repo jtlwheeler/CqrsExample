@@ -1,15 +1,14 @@
 using System;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Banking.CommandProcessor.Commands;
 using Banking.CommandProcessor.Functions.HttpTriggers.CreateAccount;
 using Banking.CommandProcessor.Commands.Commands;
+using Banking.CommandProcessor.Entities;
 
 namespace Banking.CommandProcessor.Functions.HttpTriggers.MakeDeposit
 {
@@ -38,11 +37,11 @@ namespace Banking.CommandProcessor.Functions.HttpTriggers.MakeDeposit
 
                 var body = validatedRequest.Value;
 
-                var command = new MakeDepositCommand(body.AccountId, body.Amount, body.Description);
+                var command = new MakeDepositCommand(new AccountId(body.AccountId), body.Amount, body.Description);
 
                 var result = await commandBus.Handle(command);
 
-                return new OkObjectResult(new MakeDepositResponse(result.Value));
+                return new OkObjectResult(new MakeDepositResponse(result.Value.Value));
             }
             catch (Exception ex)
             {

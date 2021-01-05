@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 
 namespace Banking.CommandProcessor.Entities
@@ -6,6 +5,6 @@ namespace Banking.CommandProcessor.Entities
     public interface IEntityStore
     {
         public Task Save<T>(T entity) where T : AggregateRoot;
-        public Task<T> Load<T>(Guid entityId) where T : AggregateRoot, new();
+        public Task<T> Load<T>(EntityId entityId) where T : AggregateRoot, new();
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Banking.CommandProcessor.Commands.Commands;
 using Banking.CommandProcessor.Entities;
 using Banking.Result;
@@ -15,7 +14,7 @@ namespace Banking.CommandProcessor.Commands.Handlers
             this.entityStore = entityStore;
         }
 
-        public async Task<Result<Guid>> Handle(MakeDepositCommand command)
+        public async Task<Result<EntityId>> Handle(MakeDepositCommand command)
         {
             var entity = await entityStore.Load<BankAccount>(command.AccountId);
 
@@ -23,7 +22,7 @@ namespace Banking.CommandProcessor.Commands.Handlers
 
             await entityStore.Save(entity);
 
-            return Result<Guid>.Ok(depositId);
+            return Result<EntityId>.Ok(depositId);
         }
     }
 }

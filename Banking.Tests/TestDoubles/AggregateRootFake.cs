@@ -4,9 +4,22 @@ using Banking.Events;
 
 namespace Banking.Tests.TestDoubles
 {
+    public class FakeId: EntityId
+    {
+        public FakeId()
+        {
+            Value = Guid.NewGuid();
+        }
+
+        public FakeId(Guid value)
+        {
+            Value = value;
+        }
+    }
+
     public class AggregateRootFake : AggregateRoot
     {
-        public Guid Id { get; set; }
+        public FakeId Id { get; set; }
         public int Count { get; private set; }
 
         protected override void When(IEvent @event)
@@ -22,8 +35,8 @@ namespace Banking.Tests.TestDoubles
             var @event = new FakeEvent
             {
                 Id = Guid.NewGuid(),
-                EntityId = Id,
-                AggregateRootId = Id,
+                EntityId = Id.Value,
+                AggregateRootId = Id.Value,
                 Timestamp = DateTime.UtcNow,
                 Type = "FakeEvent",
                 Version = NextEventVersionToAssign

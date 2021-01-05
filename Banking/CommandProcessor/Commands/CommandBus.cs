@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Banking.CommandProcessor.Commands.Commands;
 using Banking.CommandProcessor.Commands.Handlers;
+using Banking.CommandProcessor.Entities;
 using Banking.Result;
 
 namespace Banking.CommandProcessor.Commands
@@ -17,7 +18,7 @@ namespace Banking.CommandProcessor.Commands
             this.makeDepositHandler = makeDepositHandler;
         }
 
-        public async Task<Result<Guid>> Handle(ICommand command)
+        public async Task<Result<EntityId>> Handle(ICommand command)
         {
             if (command is OpenBankAccountCommand)
             {
@@ -25,8 +26,7 @@ namespace Banking.CommandProcessor.Commands
             }
             else if (command is MakeDepositCommand)
             {
-                var result = await makeDepositHandler.Handle((MakeDepositCommand)command);
-                return Result<Guid>.Ok(result.Value);
+                return await makeDepositHandler.Handle((MakeDepositCommand)command);
             }
             else
             {

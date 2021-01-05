@@ -16,7 +16,7 @@ namespace Banking.Tests.CommandProcessor.Entities
             account.Open("John Doe");
 
             account.Name.Should().Be("John Doe");
-            account.Id.Should().NotBeEmpty();
+            account.Id.Value.Should().NotBeEmpty();
         }
 
         [Fact]
@@ -31,8 +31,8 @@ namespace Banking.Tests.CommandProcessor.Entities
             var accountOpenedEvent = (BankAccountCreatedEvent)account.Changes[0];
             accountOpenedEvent.Id.Should().NotBeEmpty();
             accountOpenedEvent.Timestamp.Should().BeCloseTo(DateTime.UtcNow);
-            accountOpenedEvent.EntityId.Should().Be(account.Id);
-            accountOpenedEvent.AggregateRootId.Should().Be(account.Id);
+            accountOpenedEvent.EntityId.Should().Be(account.Id.Value);
+            accountOpenedEvent.AggregateRootId.Should().Be(account.Id.Value);
             accountOpenedEvent.Type.Should().Be("BankAccountCreatedEvent");
             accountOpenedEvent.Name.Should().Be("John Doe");
         }
