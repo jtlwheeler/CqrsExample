@@ -19,10 +19,10 @@ namespace Banking.CommandProcessor.Events.EventStore
             this.container = container;
         }
 
-        public async Task<List<IEvent>> GetEvents(Guid entityId)
+        public async Task<List<Event>> GetEvents(Guid entityId)
         {
-            var events = new List<IEvent>();
-            using (var setIterator = container.GetItemLinqQueryable<IEvent>()
+            var events = new List<Event>();
+            using (var setIterator = container.GetItemLinqQueryable<Event>()
                 .Where(@event => @event.EntityId == entityId)
                 .OrderBy(@event => @event.Version)
                 .ToStreamIterator())
@@ -52,7 +52,7 @@ namespace Banking.CommandProcessor.Events.EventStore
             return events;
         }
 
-        public async Task Save(IEvent @event)
+        public async Task Save(Event @event)
         {
             switch (@event)
             {

@@ -7,23 +7,23 @@ namespace Banking.CommandProcessor.Entities
     {
         protected int NextEventVersionToAssign { get; private set; }
 
-        public List<IEvent> Changes { get; private set; }
+        public List<Event> Changes { get; private set; }
 
         protected AggregateRoot()
         {
-            Changes = new List<IEvent>();
+            Changes = new List<Event>();
             NextEventVersionToAssign = 1;
         }
 
-        protected abstract void When(IEvent @event);
+        protected abstract void When(Event @event);
 
-        public void Replay(IEvent @event)
+        public void Replay(Event @event)
         {
             When(@event);
             NextEventVersionToAssign = @event.Version + 1;
         }
 
-        protected void Apply(IEvent @event)
+        protected void Apply(Event @event)
         {
             When(@event);
             Changes.Add(@event);

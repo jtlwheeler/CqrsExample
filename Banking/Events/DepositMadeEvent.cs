@@ -1,18 +1,10 @@
 using System;
-using Banking.CommandProcessor.Entities;
 
 namespace Banking.Events
 {
-    public class DepositMadeEvent: IEvent
+    public class DepositMadeEvent: Event
     {
         public const string EventTypeName = "DepositMadeEvent";
-        public Guid Id { get; private set; }
-        public Guid EntityId { get; private set; }
-        public Guid AggregateRootId { get; private set; }
-        public DateTime Timestamp { get; private set; }
-        public string Type { get; private set; }
-        public int Version { get; private set; }
-
         public string Description { get; private set; }
         public decimal Amount { get; private set; }
 

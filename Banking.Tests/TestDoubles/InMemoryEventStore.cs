@@ -9,19 +9,19 @@ namespace Banking.Tests.TestDoubles
 {
     public class InMemoryEventStore : IEventStore
     {
-        public List<IEvent> SavedEvents { get; private set; }
+        public List<Event> SavedEvents { get; private set; }
 
         public InMemoryEventStore()
         {
-            SavedEvents = new List<IEvent>();
+            SavedEvents = new List<Event>();
         }
 
-        public async Task Save(IEvent @event)
+        public async Task Save(Event @event)
         {
             await Task.Run(() => SavedEvents.Add(@event));
         }
 
-        public async Task<List<IEvent>> GetEvents(Guid aggregateRootId)
+        public async Task<List<Event>> GetEvents(Guid aggregateRootId)
         {
             return await Task.Run(() =>
                 SavedEvents

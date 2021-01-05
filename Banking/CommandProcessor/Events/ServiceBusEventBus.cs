@@ -17,7 +17,7 @@ namespace Banking.CommandProcessor.Events
             serviceBusSender = serviceBusClient.CreateSender(queueName);
         }
 
-        public async Task Publish<T>(T @event) where T : IEvent
+        public async Task Publish<T>(T @event) where T : Event
         {
             ServiceBusMessage message = new ServiceBusMessage(JsonConvert.SerializeObject(@event));
             await serviceBusSender.SendMessageAsync(message);

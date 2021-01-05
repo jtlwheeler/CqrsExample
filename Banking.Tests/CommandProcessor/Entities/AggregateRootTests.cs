@@ -30,25 +30,21 @@ namespace Banking.Tests.CommandProcessor.Entities
                 Id = new FakeId()
             };
 
-            var event1 = new FakeEvent
-            {
-                Id = Guid.NewGuid(),
-                AggregateRootId = entity.Id.Value,
-                EntityId = entity.Id.Value,
-                Timestamp = DateTime.UtcNow,
-                Type = "FakeEvent",
-                Version = 1
-            };
+            var event1 = new FakeEvent(
+                Guid.NewGuid(),
+                entity.Id.Value,
+                entity.Id.Value,
+                DateTime.UtcNow,
+                1
+            );
 
-            var event2 = new FakeEvent
-            {
-                Id = Guid.NewGuid(),
-                AggregateRootId = entity.Id.Value,
-                EntityId = entity.Id.Value,
-                Timestamp = DateTime.UtcNow,
-                Type = "FakeEvent",
-                Version = 2
-            };
+            var event2 = new FakeEvent(
+                Guid.NewGuid(),
+                entity.Id.Value,
+                entity.Id.Value,
+                DateTime.UtcNow,
+                2
+            );
 
             entity.Replay(event1);
             entity.Replay(event2);

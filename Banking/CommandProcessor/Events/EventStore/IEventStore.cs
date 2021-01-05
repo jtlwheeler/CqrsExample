@@ -7,7 +7,7 @@ namespace Banking.CommandProcessor.Events.EventStore
 {
     public interface IEventStore
     {
-        public Task Save(IEvent @event);
-        public Task<List<IEvent>> GetEvents(Guid aggregateRootId);
+        public Task Save(Event @event);
+        public Task<List<Event>> GetEvents(Guid aggregateRootId);
     }
 }

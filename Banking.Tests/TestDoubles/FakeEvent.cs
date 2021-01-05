@@ -3,13 +3,17 @@ using Banking.Events;
 
 namespace Banking.Tests.TestDoubles
 {
-    public class FakeEvent : IEvent
+    public class FakeEvent : Event
     {
-        public Guid Id { get; set; }
-        public Guid AggregateRootId { get; set; }
-        public Guid EntityId { get; set; }
-        public DateTime Timestamp { get; set; }
-        public string Type { get; set; }
-        public int Version { get; set; }
+        public FakeEvent(Guid id, Guid entityId, Guid aggregateRootId,
+                            DateTime timestamp, int version)
+        {
+            Id = id;
+            EntityId = entityId;
+            AggregateRootId = aggregateRootId;
+            Timestamp = timestamp;
+            Type = "FakeEvent";
+            Version = version;
+        }
     }
 }

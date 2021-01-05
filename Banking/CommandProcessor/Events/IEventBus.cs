@@ -5,6 +5,6 @@ namespace Banking.CommandProcessor.Events
 {
     public interface IEventBus
     {
-        public Task Publish<T>(T @event) where T: IEvent;
+        public Task Publish<T>(T @event) where T: Event;
     }
 }

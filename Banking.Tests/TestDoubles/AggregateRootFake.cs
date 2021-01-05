@@ -22,7 +22,7 @@ namespace Banking.Tests.TestDoubles
         public FakeId Id { get; set; }
         public int Count { get; private set; }
 
-        protected override void When(IEvent @event)
+        protected override void When(Event @event)
         {
             if (@event is FakeEvent)
             {
@@ -32,15 +32,13 @@ namespace Banking.Tests.TestDoubles
 
         public void Increment()
         {
-            var @event = new FakeEvent
-            {
-                Id = Guid.NewGuid(),
-                EntityId = Id.Value,
-                AggregateRootId = Id.Value,
-                Timestamp = DateTime.UtcNow,
-                Type = "FakeEvent",
-                Version = NextEventVersionToAssign
-            };
+            var @event = new FakeEvent(
+                Guid.NewGuid(),
+                Id.Value,
+                Id.Value,
+                DateTime.UtcNow,
+                NextEventVersionToAssign
+            );
 
             Apply(@event);
         }
