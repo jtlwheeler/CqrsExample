@@ -23,7 +23,7 @@ namespace Banking.CommandProcessor.Events.EventStore
         {
             var events = new List<Event>();
             using (var setIterator = container.GetItemLinqQueryable<Event>()
-                .Where(@event => @event.EntityId == entityId)
+                .Where(@event => @event.AggregateRootId == entityId)
                 .OrderBy(@event => @event.Version)
                 .ToStreamIterator())
             {

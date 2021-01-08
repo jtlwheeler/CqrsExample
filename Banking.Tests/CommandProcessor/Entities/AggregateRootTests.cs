@@ -1,4 +1,5 @@
 ﻿using System;
+using Banking.CommandProcessor.Entities;
 using Banking.Tests.TestDoubles;
 using FluentAssertions;
 using Xunit;
@@ -52,6 +53,57 @@ namespace Banking.Tests.CommandProcessor.Entities
             entity.Increment();
 
             entity.Changes[0].Version.Should().Be(3);
+        }
+
+        [Fact]
+        public void WhenAnEventsAreReplayed_AnErrorShouldBeThrownIfTheirIsAVersionMismatch()
+        {
+            var entity = new AggregateRootFake
+            {
+                Id = new FakeId()
+            };
+
+            var event1 = new FakeEvent(
+                Guid.NewGuid(),
+                entity.Id.Value,
+                entity.Id.Value,
+                DateTime.UtcNow,
+                1
+            );
+
+            var event2 = new FakeEvent(
+                Guid.NewGuid(),
+                entity.Id.Value,
+                entity.Id.Value,
+                DateTime.UtcNow,
+                1
+            );
+
+            entity.Replay(event1);
+            entity.Invoking(e => e.Replay(event2))
+                .Should().Throw<EntityException>()
+                .WithMessage("Unexpected event version. Expected version '1' to be '2'");
+        }
+
+        [Fact]
+        public void WhenAnEventsAreApplied_AnErrorShouldBeThrownIfTheirIsAVersionMismatch()
+        {
+            var entity = new AggregateRootFake
+            {
+                Id = new FakeId()
+            };
+
+            var @event = new FakeEvent(
+                Guid.NewGuid(),
+                entity.Id.Value,
+                entity.Id.Value,
+                DateTime.UtcNow,
+                2
+            );
+
+            entity.Invoking(e => e.FakeApplyEvent(@event))
+                .Should().Throw<EntityException>()
+                .WithMessage("Unexpected event version. Expected version '2' to be '1'");
         }
     }
 }

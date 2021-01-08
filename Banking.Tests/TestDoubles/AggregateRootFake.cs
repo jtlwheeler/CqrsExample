@@ -42,5 +42,10 @@ namespace Banking.Tests.TestDoubles
 
             Apply(@event);
         }
+
+        public void FakeApplyEvent(Event @event)
+        {
+            Apply(@event);
+        }
     }
 }
