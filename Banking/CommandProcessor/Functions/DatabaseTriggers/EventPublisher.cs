@@ -31,21 +31,12 @@ namespace Banking.CommandProcessor.Functions.DatabaseTriggers
 
             foreach (var document in documents)
             {
-                logger.LogInformation($"Processing document: {document.ToString()}");
+                logger.LogInformation($"Processing document: {document}");
 
-                if (document.GetPropertyValue<string>("Type") == BankAccountCreatedEvent.EventTypeName)
-                {
-                    ProcessBankAccountCreatedEvent(document);
-                }
+                var @event = EventConvert.Deserialize(document.ToString());
+
+                eventBus.Publish(@event);
             }
-        }
-
-        private void ProcessBankAccountCreatedEvent(Document document)
-        {
-            logger.LogInformation($"Event {document.Id} is a {BankAccountCreatedEvent.EventTypeName}");
-
-            var bankAccountCreatedEvent = EventConvert.Deserialize<BankAccountCreatedEvent>(document.ToString());
-            eventBus.Publish(bankAccountCreatedEvent);
         }
     }
 }

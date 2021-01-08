@@ -6,5 +6,6 @@ namespace Banking.QueryProcessor.Domain.BankAccount
     {
         public Task Save(BankAccount bankAccount);
         public Task<BankAccount> Get(string id);
+        public Task Update(BankAccount bankAccount);
     }
 }

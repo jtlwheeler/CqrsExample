@@ -21,5 +21,11 @@ namespace Banking.QueryProcessor.Domain.BankAccount
         {
             return await context.BankAccounts.FindAsync(id);
         }
+
+        public async Task Update(BankAccount bankAccount)
+        {
+            context.Update(bankAccount);
+            await context.SaveChangesAsync();
+        }
     }
 }

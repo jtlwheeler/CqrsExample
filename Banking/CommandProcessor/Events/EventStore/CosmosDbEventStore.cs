@@ -29,22 +29,21 @@ namespace Banking.CommandProcessor.Events.EventStore
             {
                 while (setIterator.HasMoreResults)
                 {
-                    using (ResponseMessage response = await setIterator.ReadNextAsync())
-                    {
-                        response.EnsureSuccessStatusCode();
-                        using (StreamReader sr = new StreamReader(response.Content))
-                        using (JsonTextReader jtr = new JsonTextReader(sr))
-                        {
-                            var jsonSerializer = new JsonSerializer();
-                            var json = jsonSerializer.Deserialize<JObject>(jtr);
-                            var array = (JArray)json.GetValue("Documents");
+                    using ResponseMessage response = await setIterator.ReadNextAsync();
 
-                            foreach (var item in array)
-                            {
-                                var @event = EventConvert.Deserialize(item.ToString());
-                                events.Add(@event);
-                            }
-                        }
+                    response.EnsureSuccessStatusCode();
+
+                    using StreamReader sr = new StreamReader(response.Content);
+                    using JsonTextReader jtr = new JsonTextReader(sr);
+
+                    var jsonSerializer = new JsonSerializer();
+                    var json = jsonSerializer.Deserialize<JObject>(jtr);
+                    var array = (JArray)json.GetValue("Documents");
+
+                    foreach (var item in array)
+                    {
+                        var @event = EventConvert.Deserialize(item.ToString());
+                        events.Add(@event);
                     }
                 }
             }
