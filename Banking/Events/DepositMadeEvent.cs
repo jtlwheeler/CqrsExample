@@ -8,7 +8,7 @@ namespace Banking.Events
         public string Description { get; private set; }
         public decimal Amount { get; private set; }
 
-        public DepositMadeEvent(Guid depositId, string description, decimal amount, Guid accountId, int version)
+        public DepositMadeEvent(Guid depositId, string description, decimal amount, Guid accountId, int version = -1)
         {
             AggregateRootId = accountId;
             EntityId = depositId;

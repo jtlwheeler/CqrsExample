@@ -76,34 +76,13 @@ namespace Banking.Tests.CommandProcessor.Entities
                 entity.Id.Value,
                 entity.Id.Value,
                 DateTime.UtcNow,
-                1
+                100
             );
 
             entity.Replay(event1);
             entity.Invoking(e => e.Replay(event2))
                 .Should().Throw<EntityException>()
-                .WithMessage("Unexpected event version. Expected version '1' to be '2'");
-        }
-
-        [Fact]
-        public void WhenAnEventsAreApplied_AnErrorShouldBeThrownIfTheirIsAVersionMismatch()
-        {
-            var entity = new AggregateRootFake
-            {
-                Id = new FakeId()
-            };
-
-            var @event = new FakeEvent(
-                Guid.NewGuid(),
-                entity.Id.Value,
-                entity.Id.Value,
-                DateTime.UtcNow,
-                2
-            );
-
-            entity.Invoking(e => e.FakeApplyEvent(@event))
-                .Should().Throw<EntityException>()
-                .WithMessage("Unexpected event version. Expected version '2' to be '1'");
+                .WithMessage("Unexpected event version. Expected version '100' to be '2'");
         }
     }
 }

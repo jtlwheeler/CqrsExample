@@ -14,6 +14,6 @@ namespace Banking.Events
         [JsonProperty(PropertyName = "Timestamp")]
         public DateTime Timestamp { get; protected set; }
         public string Type { get; protected set; }
-        public int Version { get; protected set; }
+        public int Version { get; set; }
     }
 }

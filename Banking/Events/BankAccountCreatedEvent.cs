@@ -7,7 +7,7 @@ namespace Banking.Events
         public const string EventTypeName = "BankAccountCreatedEvent";
         public string Name { get; private set; }
 
-        public BankAccountCreatedEvent(string name, Guid accountId, int version)
+        public BankAccountCreatedEvent(string name, Guid accountId, int version = -1)
         {
             Id = Guid.NewGuid();
             AggregateRootId = accountId;

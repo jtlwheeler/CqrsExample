@@ -5,14 +5,14 @@ namespace Banking.CommandProcessor.Entities
 {
     public abstract class AggregateRoot
     {
-        protected int NextEventVersionToAssign { get; private set; }
+        private int nextEventVersionToAssign;
 
         public List<Event> Changes { get; private set; }
 
         protected AggregateRoot()
         {
             Changes = new List<Event>();
-            NextEventVersionToAssign = 1;
+            nextEventVersionToAssign = 1;
         }
 
         protected abstract void When(Event @event);
@@ -22,23 +22,22 @@ namespace Banking.CommandProcessor.Entities
             GuardAgainstVersionMismatch(@event.Version);
 
             When(@event);
-            NextEventVersionToAssign++;
+            nextEventVersionToAssign++;
         }
 
         protected void Apply(Event @event)
         {
-            GuardAgainstVersionMismatch(@event.Version);
+            @event.Version = nextEventVersionToAssign++;
 
             When(@event);
             Changes.Add(@event);
-            NextEventVersionToAssign++;
         }
 
         private void GuardAgainstVersionMismatch(int eventVersion)
         {
-            if (eventVersion != NextEventVersionToAssign)
+            if (eventVersion != nextEventVersionToAssign)
             {
-                throw new EntityException($"Unexpected event version. Expected version '{eventVersion}' to be '{NextEventVersionToAssign}'");
+                throw new EntityException($"Unexpected event version. Expected version '{eventVersion}' to be '{nextEventVersionToAssign}'");
             }
         }
     }

@@ -36,15 +36,9 @@ namespace Banking.Tests.TestDoubles
                 Guid.NewGuid(),
                 Id.Value,
                 Id.Value,
-                DateTime.UtcNow,
-                NextEventVersionToAssign
+                DateTime.UtcNow
             );
 
-            Apply(@event);
-        }
-
-        public void FakeApplyEvent(Event @event)
-        {
             Apply(@event);
         }
     }

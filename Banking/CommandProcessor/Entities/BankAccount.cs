@@ -18,8 +18,7 @@ namespace Banking.CommandProcessor.Entities
             var newAccountId = new AccountId();
             var @event = new BankAccountCreatedEvent(
                 name,
-                newAccountId.Value,
-                NextEventVersionToAssign
+                newAccountId.Value
             );
             Apply(@event);
         }
@@ -51,8 +50,7 @@ namespace Banking.CommandProcessor.Entities
                 depositId.Value,
                 description,
                 amount,
-                Id.Value,
-                NextEventVersionToAssign
+                Id.Value
             );
             Apply(@event);
 
