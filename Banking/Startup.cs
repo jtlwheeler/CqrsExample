@@ -19,21 +19,21 @@ namespace CommandProcessor
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            builder.Services.AddSingleton<Container>((s) =>
+            builder.Services.AddSingleton((s) =>
             {
                 return ConfigureCosmosDb();
             });
 
-            builder.Services.AddSingleton<ServiceBusClient>((s) =>
+            builder.Services.AddSingleton((s) =>
             {
                 return ConfigureServiceBusClient();
             });
 
-            builder.Services.AddDbContext<BankAccountContext>((s) =>
-                s.UseCosmos(
-                    Environment.GetEnvironmentVariable("CosmosDBAccountEndpoint"),
-                    Environment.GetEnvironmentVariable("CosmosDBAccountKey"),
-                    "BankDB"
+
+            builder.Services.AddDbContext<BankAccountContext>((options) =>
+                SqlServerDbContextOptionsExtensions.UseSqlServer(
+                    options,
+                    Environment.GetEnvironmentVariable("SQLServerDbConnectionString")
                 )
             );
 
@@ -42,8 +42,8 @@ namespace CommandProcessor
             builder.Services.AddSingleton<IOpenBankAccountHandler, OpenBankAccountHandler>();
             builder.Services.AddSingleton<ICommandBus, CommandBus>();
             builder.Services.AddSingleton<IEventBus, ServiceBusEventBus>();
+            builder.Services.AddScoped<IBankAccountQueryHandler, BankAccountQueryHandler>();
             builder.Services.AddScoped<IBankAccountRepository, BankAccountRepository>();
-            builder.Services.AddSingleton<IBankAccountQueryHandler, BankAccountQueryHandler>();
             builder.Services.AddSingleton<IMakeDepositHandler, MakeDepositHandler>();
         }
 
@@ -62,14 +62,5 @@ namespace CommandProcessor
             var connectionString = Environment.GetEnvironmentVariable("ServiceBusConnection");
             return new ServiceBusClient(connectionString);
         }
-
-        //private BankAccountContext ConfigureBankAccountContext()
-        //{
-        //    var accountEndpoint = Environment.GetEnvironmentVariable("CosmosDBAccountEndpoint");
-        //    var accountKey = Environment.GetEnvironmentVariable("CosmosDBAccountKey");
-        //    var context = new BankAccountContext(accountEndpoint, accountKey);
-        //    context.Database.EnsureCreatedAsync().GetAwaiter().GetResult();
-        //    return context;
-        //}
     }
 }

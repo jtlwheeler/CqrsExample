@@ -12,6 +12,8 @@
         public decimal Amount { get; set; }
         public TransactionType Type { get; set; }
 
+        public BankAccount BankAccount { get; set; }
+
         public Transaction()
         {
         }

@@ -9,6 +9,7 @@ namespace Banking.QueryProcessor.Domain.BankAccount
         public BankAccountRepository(BankAccountContext context)
         {
             this.context = context;
+            context.Database.EnsureCreated();
         }
 
         public async Task Save(BankAccount bankAccount)
