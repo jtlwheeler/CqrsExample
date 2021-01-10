@@ -69,6 +69,7 @@ namespace Banking.QueryProcessor.Functions.SeviceBusTriggers
             var bankAccountId = @event.AggregateRootId;
 
             var bankAccount = await repositoryFacade.BankAccountRepository.Get(bankAccountId.ToString());
+            bankAccount.Balance += @event.Amount;
 
             var deposit = new Transaction
             {
@@ -82,6 +83,7 @@ namespace Banking.QueryProcessor.Functions.SeviceBusTriggers
             bankAccount.Transactions.Add(deposit);
 
             repositoryFacade.TransactionsRepository.Insert(deposit);
+            repositoryFacade.BankAccountRepository.Update(bankAccount);
             await repositoryFacade.Save();
         }
     }
