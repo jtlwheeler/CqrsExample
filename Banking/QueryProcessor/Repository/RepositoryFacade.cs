@@ -5,11 +5,11 @@ namespace Banking.QueryProcessor.Repository
 {
     public class RepositoryFacade: IRepositoryFacade
     {
-        private readonly BankAccountContext context;
+        private readonly BankContext context;
         public IRepository<Transaction> TransactionsRepository { get; private set; }
         public IRepository<BankAccount> BankAccountRepository {get; private set;}
 
-        public RepositoryFacade(BankAccountContext context)
+        public RepositoryFacade(BankContext context)
         {
             this.context = context;
             context.Database.EnsureCreated();

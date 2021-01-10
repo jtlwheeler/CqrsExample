@@ -2,12 +2,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Banking.QueryProcessor.Domain.BankAccount
 {
-    public class BankAccountContext : DbContext
+    public class BankContext : DbContext
     {
         public DbSet<BankAccount> BankAccounts { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
 
-        public BankAccountContext(DbContextOptions<BankAccountContext> options): base(options)
+        public BankContext(DbContextOptions<BankContext> options): base(options)
         {
         }
 

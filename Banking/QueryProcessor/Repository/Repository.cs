@@ -10,10 +10,10 @@ namespace Banking.QueryProcessor.Repository
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        internal BankAccountContext context;
+        internal BankContext context;
         internal DbSet<TEntity> dbSet;
 
-        public Repository(BankAccountContext context)
+        public Repository(BankContext context)
         {
             this.context = context;
             this.dbSet = context.Set<TEntity>();

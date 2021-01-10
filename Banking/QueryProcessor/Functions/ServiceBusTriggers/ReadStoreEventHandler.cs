@@ -76,11 +76,12 @@ namespace Banking.QueryProcessor.Functions.SeviceBusTriggers
                 Description = @event.Description,
                 Amount = @event.Amount,
                 Type = TransactionType.Deposit,
+                BankAccount = bankAccount
             };
 
             bankAccount.Transactions.Add(deposit);
 
-            repositoryFacade.BankAccountRepository.Update(bankAccount);
+            repositoryFacade.TransactionsRepository.Insert(deposit);
             await repositoryFacade.Save();
         }
     }

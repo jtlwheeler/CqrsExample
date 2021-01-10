@@ -32,7 +32,7 @@ namespace CommandProcessor
             });
 
 
-            builder.Services.AddDbContext<BankAccountContext>((options) =>
+            builder.Services.AddDbContext<BankContext>((options) =>
                 SqlServerDbContextOptionsExtensions.UseSqlServer(
                     options,
                     Environment.GetEnvironmentVariable("SQLServerDbConnectionString")
