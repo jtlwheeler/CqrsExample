@@ -4,18 +4,18 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Banking.QueryProcessor.Queries.Queries;
 using Banking.QueryProcessor.Queries.Handlers;
+using MediatR;
 
 namespace Banking.QueryProcessor.Functions.HttpTriggers.GetAccount
 {
     public class GetAccount
     {
-        private readonly IBankAccountQueryHandler bankAccountQueryHandler;
+        private readonly IMediator mediator;
 
-        public GetAccount(IBankAccountQueryHandler bankAccountQueryHandler)
+        public GetAccount(IMediator mediator)
         {
-            this.bankAccountQueryHandler = bankAccountQueryHandler;
+            this.mediator = mediator;
         }
 
         [FunctionName("GetAccount")]
@@ -26,7 +26,7 @@ namespace Banking.QueryProcessor.Functions.HttpTriggers.GetAccount
         {
             
             var bankAccountQuery = new BankAccountQuery(id);
-            var bankAccount = await bankAccountQueryHandler.Handle(bankAccountQuery);
+            var bankAccount = await mediator.Send(bankAccountQuery);
 
             var response = new AccountResponse(
                 bankAccount.Id,

@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Banking.QueryProcessor.Domain.BankAccount;
 using Banking.QueryProcessor.Queries.Handlers;
-using Banking.QueryProcessor.Queries.Queries;
 using FluentAssertions;
 using Moq;
 using Xunit;

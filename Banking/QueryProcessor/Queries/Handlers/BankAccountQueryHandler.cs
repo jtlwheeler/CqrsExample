@@ -1,10 +1,20 @@
+using System.Threading;
 using System.Threading.Tasks;
 using Banking.QueryProcessor.Domain.BankAccount;
-using Banking.QueryProcessor.Queries.Queries;
+using MediatR;
 
 namespace Banking.QueryProcessor.Queries.Handlers
 {
-    public class BankAccountQueryHandler: IBankAccountQueryHandler
+    public class BankAccountQuery : IRequest<BankAccount>
+    {
+        public string Id { get; private set; }
+        public BankAccountQuery(string id)
+        {
+            Id = id;
+        }
+    }
+
+    public class BankAccountQueryHandler: IRequestHandler<BankAccountQuery, BankAccount>
     {
         private readonly IBankAccountRepository bankAccountRepository;
 
@@ -13,9 +23,9 @@ namespace Banking.QueryProcessor.Queries.Handlers
             this.bankAccountRepository = bankAccountRepository;
         }
 
-        public async Task<BankAccount> Handle(BankAccountQuery query)
+        public async Task<BankAccount> Handle(BankAccountQuery request, CancellationToken cancellationToken)
         {
-            return await bankAccountRepository.Get(query.Id);
+            return await bankAccountRepository.Get(request.Id);
         }
     }
 }
