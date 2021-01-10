@@ -42,14 +42,17 @@ namespace Banking.Tests.QueryProcessor.Queries.Handlers
                 Description = "Description 3"
             };
 
-            bankAccount.Transactions.Add(transaction1);
-            bankAccount.Transactions.Add(transaction2);
-            bankAccount.Transactions.Add(transaction3);
+            var transactions = new List<Transaction>
+            {
+                transaction1,
+                transaction2,
+                transaction3
+            };
             
             var bankAccountRepository = new Mock<IBankAccountRepository>();
             bankAccountRepository
-                .Setup(mock => mock.Get(query.BankAccountId))
-                .Returns(Task.Run(() => bankAccount));
+                .Setup(mock => mock.GetTransactions(query.BankAccountId))
+                .Returns(Task.Run(() => transactions));
 
             var handler = new TransactionQueryHandler(bankAccountRepository.Object);
 

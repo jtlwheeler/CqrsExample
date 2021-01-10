@@ -1,4 +1,7 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Banking.QueryProcessor.Domain.BankAccount
 {
@@ -27,6 +30,13 @@ namespace Banking.QueryProcessor.Domain.BankAccount
         {
             context.Update(bankAccount);
             await context.SaveChangesAsync();
+        }
+
+        public async Task<List<Transaction>> GetTransactions(string id)
+        {
+            return await context.Transactions
+                .Where(transaction => transaction.BankAccount.Id == id)
+                .ToListAsync();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Banking.QueryProcessor.Domain.BankAccount;
@@ -27,8 +28,7 @@ namespace Banking.QueryProcessor.Queries.Handlers
 
         public async Task<List<Transaction>> Handle(TransactionQuery request, CancellationToken cancellationToken)
         {
-            var bankAccount = await _bankAccountRepository.Get(request.BankAccountId);
-            return bankAccount.Transactions;
+            return await _bankAccountRepository.GetTransactions(request.BankAccountId);
         }
     }
 }

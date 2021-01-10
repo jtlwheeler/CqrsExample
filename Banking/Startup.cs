@@ -6,6 +6,7 @@ using Banking.CommandProcessor.Events;
 using Banking.CommandProcessor.Events.EventStore;
 using Banking.QueryProcessor.Domain.BankAccount;
 using Banking.QueryProcessor.Queries.Handlers;
+using MediatR;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,7 @@ namespace CommandProcessor
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
+            builder.Services.AddMediatR(typeof(Startup));
             builder.Services.AddSingleton((s) =>
             {
                 return ConfigureCosmosDb();
