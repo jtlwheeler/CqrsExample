@@ -8,17 +8,30 @@ using Banking.QueryProcessor.Functions.SeviceBusTriggers;
 using Banking.Events;
 using Banking.CommandProcessor.Entities;
 using System.Threading.Tasks;
+using Banking.QueryProcessor.Repository;
 
 namespace Banking.Tests.QueryProcessor.Functions.ServiceBusTriggers
 {
     public class ReadStoreEventHandlerTests
     {
+        private readonly Mock<IRepositoryFacade> mockRepositoryFacade;
+        private readonly Mock<ILogger> mockLogger;
+        public ReadStoreEventHandlerTests()
+        {
+            mockRepositoryFacade = new Mock<IRepositoryFacade>();
+            mockLogger = new Mock<ILogger>();
+        }
+
         [Fact]
         public async void WhenABankAccountCreatedEventIsReceived_ThenANewBankAccountIsSaved()
         {
-            var mockBankAccountRepository = new Mock<IBankAccountRepository>();
-            var mockLogger = new Mock<ILogger>();
-            var readerStoreEventHandler = new ReadStoreEventHandler(mockBankAccountRepository.Object);
+            var mockBankAccountRepository = new Mock<IRepository<Banking.QueryProcessor.Domain.BankAccount.BankAccount>>();
+
+            mockRepositoryFacade
+                .Setup(mock => mock.BankAccountRepository)
+                .Returns(mockBankAccountRepository.Object);
+
+            var readerStoreEventHandler = new ReadStoreEventHandler(mockRepositoryFacade.Object);
 
             var bankAccountId = new AccountId();
             var bankAccountCreatedEvent = new BankAccountCreatedEvent("John Doe", bankAccountId.Value, 1);
@@ -26,26 +39,30 @@ namespace Banking.Tests.QueryProcessor.Functions.ServiceBusTriggers
             var jsonData = JsonConvert.SerializeObject(bankAccountCreatedEvent);
             await readerStoreEventHandler.Run(jsonData, 1, DateTime.UtcNow, "1", mockLogger.Object);
 
-            mockBankAccountRepository.Verify(
-                m => m.Save(It.Is<Banking.QueryProcessor.Domain.BankAccount.BankAccount>(p => p.Id == bankAccountId.Value.ToString() && p.AccountHolderName == "John Doe"))
+            mockRepositoryFacade.Verify(
+                m => m.BankAccountRepository.Insert(It.Is<Banking.QueryProcessor.Domain.BankAccount.BankAccount>(p => p.Id == bankAccountId.Value.ToString() && p.AccountHolderName == "John Doe"))
             );
         }
 
         [Fact]
         public async void WhenAMakeDepositEventIsReceived_ThenADepositIsSaved()
         {
-            var mockLogger = new Mock<ILogger>();
-            var mockBankAccountRepository = new Mock<IBankAccountRepository>();
-            var readerStoreEventHandler = new ReadStoreEventHandler(mockBankAccountRepository.Object);
+            var readerStoreEventHandler = new ReadStoreEventHandler(mockRepositoryFacade.Object);
 
             var accountId = Guid.NewGuid();
             var mockBankAccount = new Banking.QueryProcessor.Domain.BankAccount.BankAccount
             {
                 Id = accountId.ToString()
             };
+
+            var mockBankAccountRepository = new Mock<IRepository<Banking.QueryProcessor.Domain.BankAccount.BankAccount>>();
             mockBankAccountRepository
-                .Setup(a => a.Get(mockBankAccount.Id))
+                .Setup(mock => mock.Get(mockBankAccount.Id))
                 .Returns(Task.Run(() => mockBankAccount));
+
+            mockRepositoryFacade
+                .Setup(mock => mock.BankAccountRepository)
+                .Returns(mockBankAccountRepository.Object);
 
             var depositMadeEvent = new DepositMadeEvent(Guid.NewGuid(), "A Deposit", 123.45m, accountId, 1);
 
@@ -53,8 +70,8 @@ namespace Banking.Tests.QueryProcessor.Functions.ServiceBusTriggers
 
             await readerStoreEventHandler.Run(jsonData, 1, DateTime.UtcNow, "1", mockLogger.Object);
 
-            mockBankAccountRepository.Verify(
-                m => m.Update(It.Is<Banking.QueryProcessor.Domain.BankAccount.BankAccount>(
+            mockRepositoryFacade.Verify(
+                m => m.BankAccountRepository.Update(It.Is<Banking.QueryProcessor.Domain.BankAccount.BankAccount>(
                     bankAccount =>
                         bankAccount.Id == mockBankAccount.Id
                         && bankAccount.Transactions[0].Description == depositMadeEvent.Description

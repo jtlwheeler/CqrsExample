@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Banking.Events;
 using Banking.QueryProcessor.Domain.BankAccount;
+using Banking.QueryProcessor.Repository;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 
@@ -9,12 +10,12 @@ namespace Banking.QueryProcessor.Functions.SeviceBusTriggers
 {
     public class ReadStoreEventHandler
     {
-        private readonly IBankAccountRepository bankAccountRepository;
+        private readonly IRepositoryFacade repositoryFacade;
         private ILogger logger;
 
-        public ReadStoreEventHandler(IBankAccountRepository bankAccountRepository)
+        public ReadStoreEventHandler(IRepositoryFacade repositoryFacade)
         {
-            this.bankAccountRepository = bankAccountRepository;
+            this.repositoryFacade = repositoryFacade;
         }
 
         [FunctionName("ReadStoreEventHandler")]
@@ -38,11 +39,11 @@ namespace Banking.QueryProcessor.Functions.SeviceBusTriggers
             {
                 case BankAccountCreatedEvent bankAccountCreatedEvent:
                     log.LogInformation("Received BankAccountCreatedEvent event on message bus.");
-                    await handleBankAccountCreatedEvent(bankAccountCreatedEvent);
+                    await HandleBankAccountCreatedEvent(bankAccountCreatedEvent);
                     break;
                 case DepositMadeEvent depositMadeEvent:
                     log.LogInformation("Received DepositMadeEvent event on message bus.");
-                    await handleDepositMadeEvent(depositMadeEvent);
+                    await HandleDepositMadeEvent(depositMadeEvent);
                     break;
                 default:
                     log.LogInformation("Received unknown event type.");
@@ -50,7 +51,7 @@ namespace Banking.QueryProcessor.Functions.SeviceBusTriggers
             }
         }
 
-        private async Task handleBankAccountCreatedEvent(BankAccountCreatedEvent @event)
+        private async Task HandleBankAccountCreatedEvent(BankAccountCreatedEvent @event)
         {
             var newBankAccount = new BankAccount
             {
@@ -59,26 +60,28 @@ namespace Banking.QueryProcessor.Functions.SeviceBusTriggers
                 Balance = 0.0m
             };
 
-            await bankAccountRepository.Save(newBankAccount);
+            repositoryFacade.BankAccountRepository.Insert(newBankAccount);
+            await repositoryFacade.Save();
         }
 
-        private async Task handleDepositMadeEvent(DepositMadeEvent @event)
+        private async Task HandleDepositMadeEvent(DepositMadeEvent @event)
         {
             var bankAccountId = @event.AggregateRootId;
 
-            var bankAccount = await bankAccountRepository.Get(bankAccountId.ToString());
+            var bankAccount = await repositoryFacade.BankAccountRepository.Get(bankAccountId.ToString());
 
             var deposit = new Transaction
             {
                 Id = @event.EntityId.ToString(),
                 Description = @event.Description,
                 Amount = @event.Amount,
-                Type = TransactionType.Deposit
+                Type = TransactionType.Deposit,
             };
 
             bankAccount.Transactions.Add(deposit);
 
-            await bankAccountRepository.Update(bankAccount);
+            repositoryFacade.BankAccountRepository.Update(bankAccount);
+            await repositoryFacade.Save();
         }
     }
 }

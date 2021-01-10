@@ -5,6 +5,7 @@ using Banking.CommandProcessor.Entities;
 using Banking.CommandProcessor.Events;
 using Banking.CommandProcessor.Events.EventStore;
 using Banking.QueryProcessor.Domain.BankAccount;
+using Banking.QueryProcessor.Repository;
 using MediatR;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
@@ -43,7 +44,7 @@ namespace CommandProcessor
             builder.Services.AddSingleton<IOpenBankAccountHandler, OpenBankAccountHandler>();
             builder.Services.AddSingleton<ICommandBus, CommandBus>();
             builder.Services.AddSingleton<IEventBus, ServiceBusEventBus>();
-            builder.Services.AddScoped<IBankAccountRepository, BankAccountRepository>();
+            builder.Services.AddScoped<IRepositoryFacade, RepositoryFacade>();
             builder.Services.AddSingleton<IMakeDepositHandler, MakeDepositHandler>();
         }
 

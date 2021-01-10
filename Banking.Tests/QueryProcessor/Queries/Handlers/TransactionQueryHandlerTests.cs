@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Banking.QueryProcessor.Domain.BankAccount;
 using Banking.QueryProcessor.Queries.Handlers;
+using Banking.QueryProcessor.Repository;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -41,19 +45,27 @@ namespace Banking.Tests.QueryProcessor.Queries.Handlers
                 Description = "Description 3"
             };
 
-            var transactions = new List<Transaction>
+            IEnumerable<Transaction> transactions = new List<Transaction>
             {
                 transaction1,
                 transaction2,
                 transaction3
             };
-            
-            var bankAccountRepository = new Mock<IBankAccountRepository>();
+
+            var bankAccountRepository = new Mock<IRepository<Transaction>>();
             bankAccountRepository
-                .Setup(mock => mock.GetTransactions(query.BankAccountId))
+                .Setup(mock => mock.Get(
+                    It.IsAny<Expression<Func<Transaction, bool>>>(),
+                    It.IsAny<Func<IQueryable<Transaction>, IOrderedQueryable<Transaction>>>(),
+                    It.IsAny<string>()))
                 .Returns(Task.Run(() => transactions));
 
-            var handler = new TransactionQueryHandler(bankAccountRepository.Object);
+            var unitOfWork = new Mock<IRepositoryFacade>();
+            unitOfWork
+                .Setup(mock => mock.TransactionsRepository)
+                .Returns(bankAccountRepository.Object);
+
+            var handler = new TransactionQueryHandler(unitOfWork.Object);
 
             var actualTransactions = await handler.Handle(query, new CancellationToken());
 

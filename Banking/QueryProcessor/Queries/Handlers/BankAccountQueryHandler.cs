@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Banking.QueryProcessor.Domain.BankAccount;
+using Banking.QueryProcessor.Repository;
 using MediatR;
 
 namespace Banking.QueryProcessor.Queries.Handlers
@@ -16,16 +17,16 @@ namespace Banking.QueryProcessor.Queries.Handlers
 
     public class BankAccountQueryHandler: IRequestHandler<BankAccountQuery, BankAccount>
     {
-        private readonly IBankAccountRepository bankAccountRepository;
+        private readonly IRepositoryFacade repositoryFacade;
 
-        public BankAccountQueryHandler(IBankAccountRepository bankAccountRepository)
+        public BankAccountQueryHandler(IRepositoryFacade repositoryFacade)
         {
-            this.bankAccountRepository = bankAccountRepository;
+            this.repositoryFacade = repositoryFacade;
         }
 
         public async Task<BankAccount> Handle(BankAccountQuery request, CancellationToken cancellationToken)
         {
-            return await bankAccountRepository.Get(request.Id);
+            return await repositoryFacade.BankAccountRepository.Get(request.Id);
         }
     }
 }

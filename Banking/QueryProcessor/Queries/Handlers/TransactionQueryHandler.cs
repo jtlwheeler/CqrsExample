@@ -2,7 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Banking.QueryProcessor.Domain.BankAccount;
+using Banking.QueryProcessor.Repository;
 using MediatR;
+using System.Linq;
 
 namespace Banking.QueryProcessor.Queries.Handlers
 {
@@ -18,16 +20,20 @@ namespace Banking.QueryProcessor.Queries.Handlers
 
     public class TransactionQueryHandler: IRequestHandler<TransactionQuery, List<Transaction>>
     {
-        private readonly IBankAccountRepository _bankAccountRepository;
+        private readonly IRepositoryFacade repositoryFacade;
 
-        public TransactionQueryHandler(IBankAccountRepository bankAccountRepository)
+        public TransactionQueryHandler(IRepositoryFacade repositoryFacade)
         {
-            _bankAccountRepository = bankAccountRepository;
+            this.repositoryFacade = repositoryFacade;
         }
 
         public async Task<List<Transaction>> Handle(TransactionQuery request, CancellationToken cancellationToken)
         {
-            return await _bankAccountRepository.GetTransactions(request.BankAccountId);
+            var transactions = await repositoryFacade
+                .TransactionsRepository
+                .Get(transaction => transaction.BankAccount.Id == request.BankAccountId);
+
+            return transactions.ToList();
         }
     }
 }

@@ -49,7 +49,7 @@ namespace Banking.QueryProcessor.Functions.HttpTriggers.GetTransactions
             catch (Exception ex)
             {
                 log.LogError(ex.StackTrace);
-                return new StatusCodeResult(500);
+                throw ex;
             }
         }
     }
