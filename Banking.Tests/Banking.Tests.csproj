@@ -27,5 +27,7 @@
 
   <ItemGroup>
     <Folder Include="TestDoubles\" />
+    <Folder Include="QueryProcessor\Queries\" />
+    <Folder Include="QueryProcessor\Queries\Handlers\" />
   </ItemGroup>
 </Project>
