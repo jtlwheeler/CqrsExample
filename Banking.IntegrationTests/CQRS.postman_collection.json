@@ -1,0 +1,206 @@
+{
+	"info": {
+		"_postman_id": "0f64323b-917c-447e-97ff-4b50bdb1e6a4",
+		"name": "CQRS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Account",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Account ID should be returned when request is successful\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.accountId).to.not.be.undefined;",
+							"",
+							"    pm.globals.set(\"bank_account_id\", jsonData.accountId);",
+							"",
+							"    setTimeout(function(){}, 3000);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Name\": \"John Doe\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/account",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"account"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Account",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Should contain account info\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.accountId).to.eql(pm.globals.get(\"bank_account_id\"));",
+							"    pm.expect(jsonData.accountHolderName).to.eql(\"John Doe\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Name\": \"John Doe\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/account/{{bank_account_id}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"account",
+						"{{bank_account_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Make Deposit",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"A deposit should be successful\", function () {",
+							"    pm.response.to.have.status(200);",
+							"",
+							"    var jsonData = pm.response.json();",
+							"",
+							"    pm.expect(jsonData.depositId).to.not.be.undefined;",
+							"",
+							"    pm.globals.set(\"deposit_id\", jsonData.depositId);",
+							"",
+							"    setTimeout(function(){}, 4000);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"AccountId\": \"{{bank_account_id}}\",\n    \"Amount\": 99.45,\n    \"Description\": \"Grocery Store\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/{{bank_account_id}}/deposit",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"{{bank_account_id}}",
+						"deposit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Transactions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Your test name\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.transactions).to.not.be.undefined;",
+							"",
+							"    var deposit;",
+							"    for (i = 0; i < jsonData.transactions.length; i++) {",
+							"        if (jsonData.transactions[i].id === pm.globals.get(\"deposit_id\")) {",
+							"            deposit = jsonData.transactions[i];",
+							"            break;",
+							"        }",
+							"    }",
+							"",
+							"    pm.expect(deposit).to.not.be.undefined;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Name\": \"John Doe\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/account/{{bank_account_id}}/transaction",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"account",
+						"{{bank_account_id}}",
+						"transaction"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

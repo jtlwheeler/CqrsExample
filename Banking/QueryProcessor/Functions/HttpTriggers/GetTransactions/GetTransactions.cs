@@ -35,7 +35,7 @@ namespace Banking.QueryProcessor.Functions.HttpTriggers.GetTransactions
                 var transactions = await mediator.Send(query);
 
                 var transactionsResponse = transactions.Select(transaction =>
-                    new GetTransactionsResponse
+                    new TransactionResponse
                     {
                         Id = transaction.Id,
                         Amount = transaction.Amount,
@@ -44,7 +44,12 @@ namespace Banking.QueryProcessor.Functions.HttpTriggers.GetTransactions
                     }
                 );
 
-                return new OkObjectResult(transactionsResponse);
+                var response = new GetTransactionsResponse
+                {
+                    Transactions = transactionsResponse
+                };
+
+                return new OkObjectResult(response);
             }
             catch (Exception ex)
             {

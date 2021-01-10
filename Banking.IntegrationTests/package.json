@@ -1,0 +1,14 @@
+{
+  "name": "banking.integrationtests",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "newman run CQRS.postman_collection.json -r cli -e CQRS-Local.postman_environment.json"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "newman": "^5.2.2"
+  }
+}
